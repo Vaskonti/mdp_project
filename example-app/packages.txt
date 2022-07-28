@@ -1,0 +1,71 @@
+ii  libapache2-mod-php                         2:8.1+92+ubuntu22.04.1+deb.sury.org+1                                all          server-side, HTML-embedded scripting language (Apache 2 module) (default)
+ii  libapache2-mod-php7.3                      7.3.33-4+ubuntu22.04.1+deb.sury.org+1                                amd64        server-side, HTML-embedded scripting language (Apache 2 module)
+ii  libapache2-mod-php7.4                      1:7.4.30-3+ubuntu22.04.1+deb.sury.org+1                              amd64        server-side, HTML-embedded scripting language (Apache 2 module)
+ii  libapache2-mod-php8.0                      1:8.0.21-1+ubuntu22.04.1+deb.sury.org+1                              amd64        server-side, HTML-embedded scripting language (Apache 2 module)
+ii  libapache2-mod-php8.1                      8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        server-side, HTML-embedded scripting language (Apache 2 module)
+ii  php                                        2:8.1+92+ubuntu22.04.1+deb.sury.org+1                                all          server-side, HTML-embedded scripting language (default)
+ii  php-common                                 2:92+ubuntu22.04.1+deb.sury.org+1                                    all          Common files for PHP packages
+ii  php-mongodb                                1.13.0+1.11.1+1.9.2+1.7.5-1+ubuntu22.04.1+deb.sury.org+1             amd64        MongoDB driver for PHP
+ii  php-pear                                   1:1.10.13+submodules+notgz+2022032202-2+ubuntu20.04.1+deb.sury.org+1 all          PEAR Base System
+ii  php7.3-amqp                                1.11.0-4+ubuntu22.04.1+deb.sury.org+1                                amd64        AMQP extension for PHP
+ii  php7.3-cli                                 7.3.33-4+ubuntu22.04.1+deb.sury.org+1                                amd64        command-line interpreter for the PHP scripting language
+ii  php7.3-common                              7.3.33-4+ubuntu22.04.1+deb.sury.org+1                                amd64        documentation, examples and common module for PHP
+ii  php7.3-dev                                 7.3.33-4+ubuntu22.04.1+deb.sury.org+1                                amd64        Files for PHP7.3 module development
+ii  php7.3-igbinary                            3.2.7+2.0.8-1+ubuntu22.04.1+deb.sury.org+1                           amd64        igbinary PHP serializer
+ii  php7.3-json                                7.3.33-4+ubuntu22.04.1+deb.sury.org+1                                amd64        JSON module for PHP
+ii  php7.3-mbstring                            7.3.33-4+ubuntu22.04.1+deb.sury.org+1                                amd64        MBSTRING module for PHP
+ii  php7.3-mysql                               7.3.33-4+ubuntu22.04.1+deb.sury.org+1                                amd64        MySQL module for PHP
+ii  php7.3-opcache                             7.3.33-4+ubuntu22.04.1+deb.sury.org+1                                amd64        Zend OpCache module for PHP
+ii  php7.3-readline                            7.3.33-4+ubuntu22.04.1+deb.sury.org+1                                amd64        readline module for PHP
+ii  php7.3-redis                               5.3.7+4.3.0-1+ubuntu22.04.1+deb.sury.org+2                           amd64        PHP extension for interfacing with Redis
+ii  php7.3-xml                                 7.3.33-4+ubuntu22.04.1+deb.sury.org+1                                amd64        DOM, SimpleXML, WDDX, XML, and XSL module for PHP
+ii  php7.4-amqp                                1.11.0-4+ubuntu22.04.1+deb.sury.org+1                                amd64        AMQP extension for PHP
+ii  php7.4-cli                                 1:7.4.30-3+ubuntu22.04.1+deb.sury.org+1                              amd64        command-line interpreter for the PHP scripting language
+ii  php7.4-common                              1:7.4.30-3+ubuntu22.04.1+deb.sury.org+1                              amd64        documentation, examples and common module for PHP
+ii  php7.4-dev                                 1:7.4.30-3+ubuntu22.04.1+deb.sury.org+1                              amd64        Files for PHP7.4 module development
+ii  php7.4-igbinary                            3.2.7+2.0.8-1+ubuntu22.04.1+deb.sury.org+1                           amd64        igbinary PHP serializer
+ii  php7.4-imagick                             3.7.0-2+ubuntu22.04.1+deb.sury.org+2                                 amd64        Provides a wrapper to the ImageMagick library
+ii  php7.4-json                                1:7.4.30-3+ubuntu22.04.1+deb.sury.org+1                              amd64        JSON module for PHP
+ii  php7.4-mbstring                            1:7.4.30-3+ubuntu22.04.1+deb.sury.org+1                              amd64        MBSTRING module for PHP
+ii  php7.4-mongodb                             1.13.0+1.11.1+1.9.2+1.7.5-1+ubuntu22.04.1+deb.sury.org+1             amd64        MongoDB driver for PHP
+ii  php7.4-mysql                               1:7.4.30-3+ubuntu22.04.1+deb.sury.org+1                              amd64        MySQL module for PHP
+ii  php7.4-opcache                             1:7.4.30-3+ubuntu22.04.1+deb.sury.org+1                              amd64        Zend OpCache module for PHP
+ii  php7.4-readline                            1:7.4.30-3+ubuntu22.04.1+deb.sury.org+1                              amd64        readline module for PHP
+ii  php7.4-redis                               5.3.7+4.3.0-1+ubuntu22.04.1+deb.sury.org+2                           amd64        PHP extension for interfacing with Redis
+ii  php7.4-xml                                 1:7.4.30-3+ubuntu22.04.1+deb.sury.org+1                              amd64        DOM, SimpleXML, XML, and XSL module for PHP
+ii  php8.0-amqp                                1.11.0-4+ubuntu22.04.1+deb.sury.org+1                                amd64        AMQP extension for PHP
+ii  php8.0-cli                                 1:8.0.21-1+ubuntu22.04.1+deb.sury.org+1                              amd64        command-line interpreter for the PHP scripting language
+ii  php8.0-common                              1:8.0.21-1+ubuntu22.04.1+deb.sury.org+1                              amd64        documentation, examples and common module for PHP
+ii  php8.0-curl                                1:8.0.21-1+ubuntu22.04.1+deb.sury.org+1                              amd64        CURL module for PHP
+ii  php8.0-dev                                 1:8.0.21-1+ubuntu22.04.1+deb.sury.org+1                              amd64        Files for PHP8.0 module development
+ii  php8.0-gd                                  1:8.0.21-1+ubuntu22.04.1+deb.sury.org+1                              amd64        GD module for PHP
+ii  php8.0-igbinary                            3.2.7+2.0.8-1+ubuntu22.04.1+deb.sury.org+1                           amd64        igbinary PHP serializer
+ii  php8.0-mbstring                            1:8.0.21-1+ubuntu22.04.1+deb.sury.org+1                              amd64        MBSTRING module for PHP
+ii  php8.0-mongodb                             1.13.0+1.11.1+1.9.2+1.7.5-1+ubuntu22.04.1+deb.sury.org+1             amd64        MongoDB driver for PHP
+ii  php8.0-mysql                               1:8.0.21-1+ubuntu22.04.1+deb.sury.org+1                              amd64        MySQL module for PHP
+ii  php8.0-opcache                             1:8.0.21-1+ubuntu22.04.1+deb.sury.org+1                              amd64        Zend OpCache module for PHP
+ii  php8.0-readline                            1:8.0.21-1+ubuntu22.04.1+deb.sury.org+1                              amd64        readline module for PHP
+ii  php8.0-redis                               5.3.7+4.3.0-1+ubuntu22.04.1+deb.sury.org+2                           amd64        PHP extension for interfacing with Redis
+ii  php8.0-xml                                 1:8.0.21-1+ubuntu22.04.1+deb.sury.org+1                              amd64        DOM, SimpleXML, XML, and XSL module for PHP
+ii  php8.1                                     8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 all          server-side, HTML-embedded scripting language (metapackage)
+ii  php8.1-amqp                                1.11.0-4+ubuntu22.04.1+deb.sury.org+1                                amd64        AMQP extension for PHP
+ii  php8.1-cli                                 8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        command-line interpreter for the PHP scripting language
+ii  php8.1-common                              8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        documentation, examples and common module for PHP
+ii  php8.1-curl                                8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        CURL module for PHP
+ii  php8.1-dev                                 8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        Files for PHP8.1 module development
+ii  php8.1-gd                                  8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        GD module for PHP
+ii  php8.1-igbinary                            3.2.7+2.0.8-1+ubuntu22.04.1+deb.sury.org+1                           amd64        igbinary PHP serializer
+ii  php8.1-imagick                             3.7.0-2+ubuntu22.04.1+deb.sury.org+2                                 amd64        Provides a wrapper to the ImageMagick library
+ii  php8.1-imap                                8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        IMAP module for PHP
+ii  php8.1-intl                                8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        Internationalisation module for PHP
+ii  php8.1-mbstring                            8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        MBSTRING module for PHP
+ii  php8.1-mongodb                             1.13.0+1.11.1+1.9.2+1.7.5-1+ubuntu22.04.1+deb.sury.org+1             amd64        MongoDB driver for PHP
+ii  php8.1-mysql                               8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        MySQL module for PHP
+ii  php8.1-opcache                             8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        Zend OpCache module for PHP
+ii  php8.1-readline                            8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        readline module for PHP
+ii  php8.1-redis                               5.3.7+4.3.0-1+ubuntu22.04.1+deb.sury.org+2                           amd64        PHP extension for interfacing with Redis
+ii  php8.1-soap                                8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        SOAP module for PHP
+ii  php8.1-xml                                 8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        DOM, SimpleXML, XML, and XSL module for PHP
+ii  php8.1-xmlrpc                              3:1.0.0~rc3-4+ubuntu22.04.1+deb.sury.org+1                           amd64        XML-RPC servers and clients functions for PHP
+ii  php8.1-zip                                 8.1.8-1+ubuntu22.04.1+deb.sury.org+1                                 amd64        Zip module for PHP
+ii  pkg-php-tools                              1.42build1                                                           all          various packaging tools and scripts for PHP packages
