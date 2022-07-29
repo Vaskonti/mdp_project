@@ -27,7 +27,8 @@ class CarPostRequest extends FormRequest
             'registrationPlate' => 'string|required|max:10',
             'brand' => 'string|required',
             'model' => 'string|required',
-            'color' => 'string|required'
+            'color' => 'string|required',
+            'category' => 'string|required|regex:/([a-cA-C])/'
         ];
     }
 }

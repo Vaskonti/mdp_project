@@ -44,10 +44,10 @@ services:
             test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
             retries: 3
             timeout: 5s
-    mongo:
-        image: mongo
-        ports:
-            - 27017:27017
+    # mongo:
+    #     image: mongo
+    #     ports:
+    #         - 27017:27017
     nginx:
         image: nginx:1.17-alpine
         container_name: example-app
@@ -57,9 +57,25 @@ services:
         volumes:
             - ./:/var/www
             - ./docker-compose/nginx:/etc/nginx/conf.d
+    mongo:
+        image: 'mongo:4.4'
+        restart: always
+        ports:
+            - "27017:27017"
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: '${DB_USERNAME}'
+            MONGO_INITDB_ROOT_PASSWORD: '${DB_PASSWORD}'
+            MONGO_INITDB_DATABASE: '${DB_DATABASE}'
+        volumes:
+            - 'sail-mongo:/data/db'
+        networks:
+            - sail
+        command: [--auth]
 networks:
     sail:
         driver: bridge
 volumes:
     sail-mysql:
+        driver: local
+    sail-mongo:
         driver: local

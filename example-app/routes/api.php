@@ -19,3 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/enter', [\App\Http\Controllers\CarsController::class, 'enterParking'])->name('api.register-car');
+Route::post('/exit', [\App\Http\Controllers\CarsController::class, 'exitParking'])->name('api.unregister-car');
+Route::get('/available', [\App\Http\Controllers\CarsController::class, 'getFreeSlots'])->name('api.get-free-parking-slots');
+Route::get('/check/{registrationPlate}', [\App\Http\Controllers\CarsController::class, 'checkSum'])->name('api.get-free-parking-slots');
