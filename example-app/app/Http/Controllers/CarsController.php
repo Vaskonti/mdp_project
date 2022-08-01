@@ -29,7 +29,6 @@ class CarsController extends Controller
             if ($freeSlots <= 0 || $freeSlots - $car->getNeededSlots() < 0) {
                 throw new NoFreeSlots();
             }
-            $car->entered = Carbon::now()->format('d-m-Y H:i');
             $car->save();
 
             CarRegisterEvent::dispatch($car);
@@ -60,7 +59,6 @@ class CarsController extends Controller
             ], 404);
         }
 
-        $car->еxited = Carbon::now()->format('d-m-Y H:i');
         $categoryPrice = number_format(Parking::determinePrice($car), 2);
         if ($car->card) {
             $categoryPrice = number_format(Parking::priceWithDiscountCard($car->card, $categoryPrice), 2);
@@ -145,10 +143,33 @@ class CarsController extends Controller
         $this->assignParams($request,$dateStart,$dateEnd);
 
         $sum = 0;
+        if($dateStart && $dateEnd)
+        {
+            $cars = Car::whereNotNull('sumPaid')->whereBetween('exited', [$dateStart,$dateEnd])->get(['sumPaid']);
+            foreach ($cars as $car) {
+                $sum += $car->sumPaid;
+            }
+            return response([
+                'message' => 'The money earned for the period ('.$dateStart->format('d-m-Y').' to '.$dateEnd->format('d-m-Y').') are: '.$sum.' lv.'
+            ], 200);
+        }
 
-        $carsSum = Car::where('sumPaid','<>', null)->sum('sumPaid');
+        if($dateStart && !$dateEnd)
+        {
+            $dateCopy = new Carbon($dateStart);
+            $dateCopy->addDay();
 
-        dd($carsSum);
+            $cars = Car::whereNotNull('sumPaid')->whereBetween('exited', [$dateStart,$dateCopy])->get(['sumPaid']);
+            foreach ($cars as $car) {
+                $sum += $car->sumPaid;
+            }
+            return response([
+                'message' => 'The money earned for  ('.$dateStart->format('d-m-Y').') are: '.$sum.' lv.'
+            ], 200);
+        }
+
+        throw new InvalidDatePeriodException();
+
     }
 
     /**

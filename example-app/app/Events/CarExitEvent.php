@@ -10,6 +10,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Carbon;
 
 class CarExitEvent
 {
@@ -24,6 +25,8 @@ class CarExitEvent
      */
     public function __construct(Car $car)
     {
+        $car->exited = Carbon::now()->toDateTimeLocalString();
+        $car->save();
         $this->car = $car;
     }
 

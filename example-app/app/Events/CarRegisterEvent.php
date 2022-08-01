@@ -10,6 +10,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Carbon;
 
 class CarRegisterEvent
 {
@@ -23,10 +24,9 @@ class CarRegisterEvent
      */
     public function __construct(Car $car)
     {
-        $car->staying = 1;
+        $car->entered = Carbon::now()->toDateTimeLocalString();
         $car->save();
         $this->car = $car;
-
     }
 
     /**
