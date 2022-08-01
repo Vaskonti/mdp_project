@@ -13,7 +13,7 @@ class Car extends MongoModel
     protected $collection = 'cars';
     protected $connection = 'mongodb';
     protected $dates = ['entered', 'exited'];
-    protected $fillable = ['registrationPlate', 'brand', 'model', 'color', 'entered', 'category', 'card'];
+    protected $fillable = ['registrationPlate', 'brand', 'model', 'color', 'entered', 'category', 'card', 'sumPaid'];
 
     public function getNeededSlots(): int
     {

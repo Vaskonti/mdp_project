@@ -65,6 +65,7 @@ class CarsController extends Controller
         if ($car->card) {
             $categoryPrice = number_format(Parking::priceWithDiscountCard($car->card, $categoryPrice), 2);
         }
+        $car->sumPaid = $categoryPrice;
         $car->save();
         CarExitEvent::dispatch($car);
         return response([
@@ -105,20 +106,9 @@ class CarsController extends Controller
      */
     public function getNumberOfCarsForPeriod(\Illuminate\Http\Request $request)
     {
-        $dateStart = $request->get('dateStart');
-        $dateEnd = $request->get('dateEnd');
-
-        if (isset($dateStart)) {
-            $dateStart = new Carbon($dateStart);
-        }
-
-        if (isset($dateEnd)) {
-            $dateEnd = new Carbon($dateEnd);
-        }
-
-        if ($dateStart > $dateEnd && $dateStart && $dateEnd) {
-            throw new InvalidDatePeriodException;
-        }
+        $dateStart = "";
+        $dateEnd = "";
+        $this->assignParams($request,$dateStart,$dateEnd);
 
         $cars = 0;
         if ($dateStart && $dateEnd) {
@@ -139,6 +129,46 @@ class CarsController extends Controller
             ], 200);
         }
 
+        return response([
+            'message' => 'Something went wrong! :('
+        ], 500);
+    }
 
+
+    /**
+     * @throws InvalidDatePeriodException
+     */
+    public function getMoneyAmountForPeriod(\Illuminate\Http\Request $request)
+    {
+        $dateStart = "";
+        $dateEnd = "";
+        $this->assignParams($request,$dateStart,$dateEnd);
+
+        $sum = 0;
+
+        $carsSum = Car::where('sumPaid','<>', null)->sum('sumPaid');
+
+        dd($carsSum);
+    }
+
+    /**
+     * @throws InvalidDatePeriodException
+     */
+    private function assignParams($request, &$dateStart, &$dateEnd)
+    {
+        $dateStart = $request->get('dateStart');
+        $dateEnd = $request->get('dateEnd');
+
+        if (isset($dateStart)) {
+            $dateStart = new Carbon($dateStart);
+        }
+
+        if (isset($dateEnd)) {
+            $dateEnd = new Carbon($dateEnd);
+        }
+
+        if ($dateStart > $dateEnd && $dateStart && $dateEnd) {
+            throw new InvalidDatePeriodException;
+        }
     }
 }
