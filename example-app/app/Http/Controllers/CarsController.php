@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\CarExitEvent;
 use App\Events\CarRegisterEvent;
+use App\Exceptions\InvalidDatePeriodException;
 use App\Exceptions\NoFreeSlots;
 use App\Http\Requests\CarPostRequest;
 use App\Models\Mongo\Car;
@@ -23,9 +24,9 @@ class CarsController extends Controller
             $car->model = $request['model'];
             $car->color = $request['color'];
             $car->category = $request['category'];
+            $car->card = $request['card'];
             $freeSlots = Parking::getFreeParkingSlots();
-            if($freeSlots <= 0 || $freeSlots - $car->getNeededSlots() < 0)
-            {
+            if ($freeSlots <= 0 || $freeSlots - $car->getNeededSlots() < 0) {
                 throw new NoFreeSlots();
             }
             $car->entered = Carbon::now()->format('d-m-Y H:i');
@@ -35,8 +36,7 @@ class CarsController extends Controller
             return response([
                 'message' => 'Car entered parking lot successfully!'
             ], 200);
-        } catch (\Exception $exception)
-        {
+        } catch (\Exception $exception) {
             Log::error($exception->getMessage());
 
             return response([
@@ -47,27 +47,28 @@ class CarsController extends Controller
 
     public function exitParking(\Illuminate\Http\Request $request)
     {
-        if(!isset($request['registrationPlate']))
-        {
+        if (!isset($request['registrationPlate'])) {
             return response([
                 'message' => 'You must provide registration plate!'
             ], 408);
         }
 
-        $car = Car::where('registrationPlate','=', $request['registrationPlate'])->first();
-        if(!$car || $car->staying == 0)
-        {
+        $car = Car::where('registrationPlate', '=', $request['registrationPlate'])->first();
+        if (!$car || isset($car->exitted)) {
             return response([
                 'message' => 'Car not found!',
             ], 404);
         }
 
-        $car->staying = 0;
-
+        $car->еxited = Carbon::now()->format('d-m-Y H:i');
+        $categoryPrice = number_format(Parking::determinePrice($car), 2);
+        if ($car->card) {
+            $categoryPrice = number_format(Parking::priceWithDiscountCard($car->card, $categoryPrice), 2);
+        }
         $car->save();
         CarExitEvent::dispatch($car);
         return response([
-            'message' => 'Car exited parking lot successfully'
+            'message' => 'Car exited parking lot successfully. The sum you must pay is ' . $categoryPrice . ' lv.'
         ], 200);
     }
 
@@ -75,7 +76,7 @@ class CarsController extends Controller
     {
         $capacity = Parking::getFreeParkingSlots();
         return response([
-            'message' => 'Available parking slots are '.$capacity,
+            'message' => 'Available parking slots are ' . $capacity,
         ], 200);
     }
 
@@ -83,14 +84,60 @@ class CarsController extends Controller
     {
         $car = Car::where('registrationPlate', '=', $registrationPlate)->first();
 
-        if(!$car || !$car->staying)
-        {
+        if (!$car || !$car->staying) {
             return response([
                 'message' => 'The car is not registered in the parking system!'
             ], 404);
         }
 
-        $categoryPrice = Parking::determinePrice($car);
+        $categoryPrice = number_format(Parking::determinePrice($car), 2);
+        if ($car->card) {
+            $categoryPrice = number_format(Parking::priceWithDiscountCard($car->card, $categoryPrice), 2);
+        }
+        return response([
+            'message' => 'The sum is ' . $categoryPrice,
+        ], 200);
+    }
+
+    /**
+     * @throws InvalidDatePeriodException
+     * @throws \Exception
+     */
+    public function getNumberOfCarsForPeriod(\Illuminate\Http\Request $request)
+    {
+        $dateStart = $request->get('dateStart');
+        $dateEnd = $request->get('dateEnd');
+
+        if (isset($dateStart)) {
+            $dateStart = new Carbon($dateStart);
+        }
+
+        if (isset($dateEnd)) {
+            $dateEnd = new Carbon($dateEnd);
+        }
+
+        if ($dateStart > $dateEnd && $dateStart && $dateEnd) {
+            throw new InvalidDatePeriodException;
+        }
+
+        $cars = 0;
+        if ($dateStart && $dateEnd) {
+            $cars = Car::whereBetween('created_at', [$dateStart,$dateEnd])->count();
+            return response([
+                'message' => 'The number of unique cars entered the parking for the period (' . $dateStart->format('d-m-Y') . ' to ' . $dateEnd->format('d-m-Y') . ') lot is: ' . $cars
+            ], 200);
+
+        }
+        if($dateStart && !$dateEnd)
+        {
+            $copy = new Carbon($dateStart);
+            $copy->addDay();
+            $cars = Car::whereBetween('created_at', [$dateStart, $copy])->count();
+
+            return response([
+                'message' => 'The number of unique cars for the date ('.$dateStart->format('d-m-Y').') is: '.$cars
+            ], 200);
+        }
 
 
     }

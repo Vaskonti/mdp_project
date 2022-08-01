@@ -28,7 +28,8 @@ class CarPostRequest extends FormRequest
             'brand' => 'string|required',
             'model' => 'string|required',
             'color' => 'string|required',
-            'category' => 'string|required|regex:/([a-cA-C])/'
+            'category' => 'string|required|regex:/([a-cA-C])/',
+            'card' => 'string'
         ];
     }
 }

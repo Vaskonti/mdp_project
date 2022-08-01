@@ -22,3 +22,4 @@ Route::post('/enter', [\App\Http\Controllers\CarsController::class, 'enterParkin
 Route::post('/exit', [\App\Http\Controllers\CarsController::class, 'exitParking'])->name('api.unregister-car');
 Route::get('/available', [\App\Http\Controllers\CarsController::class, 'getFreeSlots'])->name('api.get-free-parking-slots');
 Route::get('/check/{registrationPlate}', [\App\Http\Controllers\CarsController::class, 'checkSum'])->name('api.get-free-parking-slots');
+Route::get('/check/cars/unique', [\App\Http\Controllers\CarsController::class, 'getNumberOfCarsForPeriod'])->name('api.get-all-unique-cars-for-period');
