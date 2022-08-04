@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-
-//        Schema::create('cars', function (Blueprint $collection) {
-//            $collection->index('registrationPlate');
-//            $collection->addColumn('date','entered');
-//            $collection->addColumn('date','left');
-//        });
+        Schema::connection('mysql')->create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->char("category");
+            $table->timestamps();
+        });
     }
 
     /**
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cars_collection');
+        Schema::dropIfExists('mysql_categories');
     }
 };

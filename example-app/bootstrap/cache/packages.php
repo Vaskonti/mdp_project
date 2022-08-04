@@ -7,6 +7,17 @@
       1 => 'Jenssegers\\Mongodb\\MongodbQueueServiceProvider',
     ),
   ),
+  'laravel/nova' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Nova\\NovaCoreServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Nova' => 'Laravel\\Nova\\Nova',
+    ),
+  ),
   'laravel/sail' => 
   array (
     'providers' => 
@@ -26,6 +37,13 @@
     'providers' => 
     array (
       0 => 'Laravel\\Tinker\\TinkerServiceProvider',
+    ),
+  ),
+  'laravel/ui' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Ui\\UiServiceProvider',
     ),
   ),
   'nesbot/carbon' => 
