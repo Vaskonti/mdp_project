@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Events\CarExitEvent;
 use App\Events\CarRegisterEvent;
+use App\Exceptions\InvalidCategoryException;
 use App\Exceptions\InvalidDatePeriodException;
-use App\Exceptions\NoFreeSlots;
+use App\Exceptions\NoFreeSlotsException;
 use App\Http\Requests\CarPostRequest;
+use App\Models\Category;
+use App\Models\Mongo\Bus;
 use App\Models\Mongo\Car;
+use App\Models\Mongo\Truck;
+use App\Models\Mongo\Vehicle;
 use App\Models\Parking;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Carbon;
@@ -18,22 +23,33 @@ class CarsController extends Controller
     public function enterParking(CarPostRequest $request)
     {
         try {
-            $car = new Car();
-            $car->registrationPlate = $request['registrationPlate'];
-            $car->brand = $request['brand'];
-            $car->model = $request['model'];
-            $car->color = $request['color'];
-            $car->category = $request['category'];
+            $category = $request['category'];
+            if (!Category::isValidCategory($category)) {
+                throw new InvalidCategoryException();
+            }
+            $car = "";
+            if ($category == "A" || $category == "a")
+            {
+                $car = new Car($request->toArray());
+            }
+            else if($category == "B" || $category == "b")
+            {
+                $car = new Bus($request->toArray());
+            }
+            else
+            {
+                $car = new Truck($request->toArray());
+            }
             $car->card = $request['card'];
             $freeSlots = Parking::getFreeParkingSlots();
             if ($freeSlots <= 0 || $freeSlots - $car->getNeededSlots() < 0) {
-                throw new NoFreeSlots();
+                throw new NoFreeSlotsException();
             }
             $car->save();
 
             CarRegisterEvent::dispatch($car);
             return response([
-                'message' => 'Car entered parking lot successfully!'
+                'message' => 'Vehicle entered parking lot successfully!'
             ], 200);
         } catch (\Exception $exception) {
             Log::error($exception->getMessage());
@@ -52,10 +68,10 @@ class CarsController extends Controller
             ], 408);
         }
 
-        $car = Car::where('registrationPlate', '=', $request['registrationPlate'])->first();
+        $car = Vehicle::where('registrationPlate', '=', $request['registrationPlate'])->first();
         if (!$car || isset($car->exitted)) {
             return response([
-                'message' => 'Car not found!',
+                'message' => 'Vehicle not found!',
             ], 404);
         }
 
@@ -67,7 +83,7 @@ class CarsController extends Controller
         $car->save();
         CarExitEvent::dispatch($car);
         return response([
-            'message' => 'Car exited parking lot successfully. The sum you must pay is ' . $categoryPrice . ' lv.'
+            'message' => 'Vehicle exited parking lot successfully. The sum you must pay is ' . $categoryPrice . ' lv.'
         ], 200);
     }
 
@@ -81,9 +97,9 @@ class CarsController extends Controller
 
     public function checkSum(string $registrationPlate)
     {
-        $car = Car::where('registrationPlate', '=', $registrationPlate)->first();
+        $car = Vehicle::where('registrationPlate', '=', $registrationPlate)->first();
 
-        if (!$car || !$car->staying) {
+        if (!$car || $car->exited) {
             return response([
                 'message' => 'The car is not registered in the parking system!'
             ], 404);
@@ -110,7 +126,7 @@ class CarsController extends Controller
 
         $cars = 0;
         if ($dateStart && $dateEnd) {
-            $cars = Car::whereBetween('created_at', [$dateStart,$dateEnd])->count();
+            $cars = Vehicle::whereBetween('created_at', [$dateStart,$dateEnd])->count();
             return response([
                 'message' => 'The number of unique cars entered the parking for the period (' . $dateStart->format('d-m-Y') . ' to ' . $dateEnd->format('d-m-Y') . ') lot is: ' . $cars
             ], 200);
@@ -120,7 +136,7 @@ class CarsController extends Controller
         {
             $copy = new Carbon($dateStart);
             $copy->addDay();
-            $cars = Car::whereBetween('created_at', [$dateStart, $copy])->count();
+            $cars = Vehicle::whereBetween('created_at', [$dateStart, $copy])->count();
 
             return response([
                 'message' => 'The number of unique cars for the date ('.$dateStart->format('d-m-Y').') is: '.$cars
@@ -145,7 +161,7 @@ class CarsController extends Controller
         $sum = 0;
         if($dateStart && $dateEnd)
         {
-            $cars = Car::whereNotNull('sumPaid')->whereBetween('exited', [$dateStart,$dateEnd])->get(['sumPaid']);
+            $cars = Vehicle::whereNotNull('sumPaid')->whereBetween('exited', [$dateStart,$dateEnd])->get(['sumPaid']);
             foreach ($cars as $car) {
                 $sum += $car->sumPaid;
             }
@@ -159,7 +175,7 @@ class CarsController extends Controller
             $dateCopy = new Carbon($dateStart);
             $dateCopy->addDay();
 
-            $cars = Car::whereNotNull('sumPaid')->whereBetween('exited', [$dateStart,$dateCopy])->get(['sumPaid']);
+            $cars = Vehicle::whereNotNull('sumPaid')->whereBetween('exited', [$dateStart,$dateCopy])->get(['sumPaid']);
             foreach ($cars as $car) {
                 $sum += $car->sumPaid;
             }

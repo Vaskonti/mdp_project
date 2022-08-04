@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Helpers\HelperValidators;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\ID;
@@ -44,12 +45,16 @@ class Driver extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make(__('ID'), 'id')->sortable(),
-            Text::make(__('name'), 'name')->sortable(),
-            Text::make(__('email'), 'email')->sortable(),
-            Text::make(__('surname'), 'surname')->sortable(),
-            Textarea::make(__('description'), 'description'),
-            Text::make(__('egn'), 'egn')->sortable(),
+            ID::make(__('ID'), 'id')->sortable()->rules('required'),
+            Text::make(__('name'), 'name')->sortable()->rules('required'),
+            Text::make(__('email'), 'email')->sortable()->rules('required','email'),
+            Text::make(__('surname'), 'surname')->sortable()->rules('required'),
+            Textarea::make(__('description'), 'description')->rules('required','max:255'),
+            Text::make(__('egn'), 'egn')->sortable()
+            ->rules('required', function($attribute, $value, $fail) {
+                if(!HelperValidators::validateEGN($value))
+                    return $fail("The ".$attribute." field must be a valid bulgarian EGN!");
+            }),
             Image::make(__('image'), 'image')->disk("public"),
             BelongsToMany::make('Categories'),
         ];

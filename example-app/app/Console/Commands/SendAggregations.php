@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Mail\AggregationsMail;
-use App\Models\Mongo\Car;
+use App\Models\Mongo\Vehicle;
 use App\Notifications\AggregationNotification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -41,7 +41,7 @@ class SendAggregations extends Command
             $yesterday = Carbon::yesterday();
             $tomorrow = Carbon::tomorrow();
             $sumAggregation = Cache::remember('daily-aggregations:sum',now()->addHour(), function () use ($yesterday,$tomorrow) {
-                $carsExited = Car::whereBetween('exited', [$yesterday, $tomorrow])->get();
+                $carsExited = Vehicle::whereBetween('exited', [$yesterday, $tomorrow])->get();
                 $sum = 0;
                 foreach ($carsExited as $item) {
                     $sum += $item->sumPaid;
@@ -50,7 +50,7 @@ class SendAggregations extends Command
             });
 
             $carsRegisteredAggregation = Cache::remember('daily-aggregations:cars-registered', now()->addHour(), function() use ($yesterday,$tomorrow) {
-                return Car::whereBetween('entered', [$yesterday, $tomorrow])->count();
+                return Vehicle::whereBetween('entered', [$yesterday, $tomorrow])->count();
             });
             $today = Carbon::today()->format('d-m-Y');
             Notification::route('mail','hello@admin.com')->notify(new AggregationNotification($sumAggregation, $carsRegisteredAggregation, $today));

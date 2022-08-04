@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Mongo\Car;
+use App\Models\Mongo\Vehicle;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -16,13 +16,13 @@ class CarRegisterEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $car;
+    public Vehicle $car;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Car $car)
+    public function __construct(Vehicle $car)
     {
         $car->entered = Carbon::now()->toDateTimeLocalString();
         $car->save();
@@ -32,9 +32,9 @@ class CarRegisterEvent
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|array
      */
-    public function broadcastOn()
+    public function broadcastOn(): Channel|array
     {
         return new PrivateChannel('channel-name');
     }

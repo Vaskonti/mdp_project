@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Mongo\Car;
+use App\Models\Mongo\Vehicle;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -23,7 +23,7 @@ class CarExitEvent
      *
      * @return void
      */
-    public function __construct(Car $car)
+    public function __construct(Vehicle $car)
     {
         $car->exited = Carbon::now()->toDateTimeLocalString();
         $car->save();

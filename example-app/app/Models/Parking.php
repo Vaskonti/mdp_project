@@ -3,8 +3,7 @@
 namespace App\Models;
 
 use App\Exceptions\UnknownCardTypeException;
-use App\Models\Mongo\Car;
-use Cassandra\Time;
+use App\Models\Mongo\Vehicle;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -14,45 +13,14 @@ class Parking extends Model
     use HasFactory;
 
     public static int $CAPACITY = 200;
-    public static int $SLOTS_FOR_A = 1;
-    public static int $SLOTS_FOR_B = 2;
-    public static int $SLOTS_FOR_C = 4;
 
-    const PRICE_DAY_A = 3;
-    const PRICE_DAY_B = 6;
-    const PRICE_DAY_C = 12;
-
-    const PRICE_NIGHT_A = 2;
-    const PRICE_NIGHT_B = 4;
-    const PRICE_NIGHT_C = 8;
-
-    public static function determinePrice(Car $car)
+    public static function determinePrice(Vehicle $car)
     {
 
         $startDate = new Carbon($car->entered);
         $timeNow = Carbon::now();
-        $priceDay = 0;
-        $priceNight = 0;
-
-        switch ($car->category) {
-            case "A":
-            case "a":
-                $priceDay = self::PRICE_DAY_A;
-                $priceNight = self::PRICE_NIGHT_A;
-                break;
-            case "B":
-            case "b":
-                $priceDay = self::PRICE_DAY_B;
-                $priceNight = self::PRICE_NIGHT_B;
-                break;
-            case "C":
-            case "c":
-                $priceDay = self::PRICE_DAY_C;
-                $priceNight = self::PRICE_NIGHT_C;
-                break;
-            default:
-                break;
-        }
+        $priceDay = $car->getPrices()['day'];
+        $priceNight = $car->getPrices()['night'];
         $sum = 0;
 
         if ($timeNow->diffInDays($startDate) > 0) {
@@ -73,7 +41,7 @@ class Parking extends Model
 
     public static function getFreeParkingSlots()
     {
-        $cars = Car::where('staying', '=', 1)->get();
+        $cars = Vehicle::whereNotNull('entered')->whereNull('exited')->get();
         $capacity = Parking::$CAPACITY;
 
         foreach ($cars as $car) {
