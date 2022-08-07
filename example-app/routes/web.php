@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +15,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    Log::debug('hello-message',['test-context']);
     return view('welcome');
 });
 
 Route::get('/home', function () {
-   return view('welcome');
+    return view('welcome');
 });

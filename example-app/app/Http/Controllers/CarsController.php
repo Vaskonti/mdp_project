@@ -16,6 +16,7 @@ use App\Models\Mongo\Vehicle;
 use App\Models\Parking;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class CarsController extends Controller
@@ -105,10 +106,15 @@ class CarsController extends Controller
             ], 404);
         }
 
-        $categoryPrice = number_format(Parking::determinePrice($car), 2);
-        if ($car->card) {
-            $categoryPrice = number_format(Parking::priceWithDiscountCard($car->card, $categoryPrice), 2);
-        }
+
+        $categoryPrice = Cache::remember('current_sum'.$registrationPlate,now()->addHour(), function () use (&$car) {
+            $categoryPrice = number_format(Parking::determinePrice($car), 2);
+            if ($car->card) {
+                $categoryPrice = number_format(Parking::priceWithDiscountCard($car->card, $categoryPrice), 2);
+            }
+            return $categoryPrice;
+        });
+
         return response([
             'message' => 'The sum is ' . $categoryPrice,
         ], 200);
@@ -124,22 +130,24 @@ class CarsController extends Controller
         $dateEnd = "";
         $this->assignParams($request,$dateStart,$dateEnd);
 
-        $cars = 0;
         if ($dateStart && $dateEnd) {
-            $cars = Vehicle::whereBetween('created_at', [$dateStart,$dateEnd])->count();
+            $carsCached = Cache::remember('numberOfCars:start-'.$dateStart.':end-'.$dateEnd, now()->addDay(), function() use ($dateStart, $dateEnd){
+                return Vehicle::whereBetween('created_at', [$dateStart,$dateEnd])->count();
+            });
             return response([
-                'message' => 'The number of unique cars entered the parking for the period (' . $dateStart->format('d-m-Y') . ' to ' . $dateEnd->format('d-m-Y') . ') lot is: ' . $cars
+                'message' => 'The number of unique cars entered the parking for the period (' . $dateStart->format('d-m-Y') . ' to ' . $dateEnd->format('d-m-Y') . ') lot is: ' . $carsCached
             ], 200);
-
         }
         if($dateStart && !$dateEnd)
         {
             $copy = new Carbon($dateStart);
             $copy->addDay();
-            $cars = Vehicle::whereBetween('created_at', [$dateStart, $copy])->count();
+            $carsCached = Cache::remember('numberOfCars:day-'.$dateStart, now()->addDay(), function() use ($dateStart, $copy) {
+                return Vehicle::whereBetween('created_at', [$dateStart, $copy])->count();
+            });
 
             return response([
-                'message' => 'The number of unique cars for the date ('.$dateStart->format('d-m-Y').') is: '.$cars
+                'message' => 'The number of unique cars for the date ('.$dateStart->format('d-m-Y').') is: '.$carsCached
             ], 200);
         }
 

@@ -35,7 +35,7 @@ class HelperValidators
         $checksum = substr($egn,9,1);
 
         $egnSum = 0;
-        for ( $i=0;$i<9;$i++ ) {
+        for ( $i=0;$i<9;$i++) {
             $egnSum += substr($egn,$i,1) * $weights[$i];
         }
         $valid_checksum = $egnSum % 11;

@@ -1,16 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Helpers;
 
 use App\Exceptions\UnknownCardTypeException;
 use App\Models\Mongo\Vehicle;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
-class Parking extends Model
+class Parking
 {
-    use HasFactory;
 
     public static int $CAPACITY = 200;
 
