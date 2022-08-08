@@ -18,22 +18,28 @@ use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use function PHPUnit\Framework\isEmpty;
+use function PHPUnit\Framework\isNull;
 
 class CarsController extends Controller
 {
     public function enterParking(CarPostRequest $request)
     {
+        $carInDB = Vehicle::where('registrationPlate','=',$request['registrationPlate'])->first();
+        if ($carInDB && !$carInDB->exited)
+        {
+            return response([
+                'message' => 'Cannot register car! Car is already registered and has not left!',
+            ], 422);
+        }
         try {
             $category = $request['category'];
-            if (!Category::isValidCategory($category)) {
-                throw new InvalidCategoryException();
-            }
             $car = "";
-            if ($category == "A" || $category == "a")
+            if ($category == "A")
             {
                 $car = new Car($request->toArray());
             }
-            else if($category == "B" || $category == "b")
+            else if($category == "B")
             {
                 $car = new Bus($request->toArray());
             }
@@ -70,7 +76,7 @@ class CarsController extends Controller
         }
 
         $car = Vehicle::where('registrationPlate', '=', $request['registrationPlate'])->first();
-        if (!$car || isset($car->exitted)) {
+        if (!$car->exists() || isset($car->exited)) {
             return response([
                 'message' => 'Vehicle not found!',
             ], 404);

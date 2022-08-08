@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-
-//        Schema::create('cars', function (Blueprint $collection) {
-//            $collection->index('registrationPlate');
-//            $collection->addColumn('date','entered');
-//            $collection->addColumn('date','left');
-//        });
+        Schema::connection('mongodb')->dropIfExists('cars');
+        Schema::connection('mongodb')->create('cars', function (Blueprint $collection) {
+            $collection->index('registrationPlate');
+            $collection->addColumn('date','entered');
+        });
     }
 
     /**

@@ -14,13 +14,4 @@ class Category extends Model
         return $this->belongsToMany(Driver::class,'drivers_categories');
     }
 
-    public static function isValidCategory(string $category): bool
-    {
-        $categories = Category::all();
-        foreach ($categories as $item) {
-            if($category == $item->category)
-                return true;
-        }
-        return false;
-    }
 }
