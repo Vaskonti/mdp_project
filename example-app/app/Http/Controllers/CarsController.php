@@ -27,12 +27,10 @@ class CarsController extends Controller
 {
 
     public function test() {
-//        $res = Vehicle::whereNotNull('entered')
-//            ->whereNull('exited')
-//            ->sum('sumPaid');
-//        dd($res);
-//        $car = Vehicle::where('registrationPlate', '=', "A11")->first();
-//        dd($car);
+        //@review you get 0 with the query because you have stored the data in mongo as strings
+        $res = Vehicle::sum('sumPaid');
+
+       dd($res);
     }
 
     public function enterParking(CarPostRequest $request)
