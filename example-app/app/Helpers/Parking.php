@@ -2,16 +2,27 @@
 
 namespace App\Helpers;
 
-use App\Exceptions\UnknownCardTypeException;
+use App\Models\DiscountCard;
+use App\Models\Mongo\Bus;
+use App\Models\Mongo\Car;
+use App\Models\Mongo\Truck;
 use App\Models\Mongo\Vehicle;
 use Illuminate\Support\Carbon;
 
 class Parking
 {
+    const INTERVAL_1_START = 0;
+    const INTERVAL_1_END = 8;
+
+    const INTERVAL_2_START = 8;
+    const INTERVAL_2_END = 18;
+
+    const INTERVAL_3_START = 18;
+    const INTERVAL_3_END = 24;
 
     public static int $CAPACITY = 200;
 
-    public static function determinePrice(Vehicle $car)
+    public static function determinePrice(Vehicle $car): int
     {
 
         $startDate = new Carbon($car->entered);
@@ -38,16 +49,14 @@ class Parking
 
     public static function getFreeParkingSlots()
     {
-        $cars = Vehicle::whereNotNull('entered')
+        $vehicles = Vehicle::whereNotNull('entered')
             ->whereNull('exited')
             ->get();
-        $capacity = Parking::$CAPACITY;
-        //@review a step better would have been to use the sum function to calculate the currently taken slots;
-        //even better would have been to retrieve the number of vehicles for each category and then just multiply by the slots that each category takes;
-        foreach ($cars as $car) {
-            $capacity -= $car->getNeededSlots();
-        }
-        return $capacity;
+        $cars = $vehicles->where('category','=','A')->count() * Car::NEEDED_SLOTS;
+        $buses = $vehicles->where('category','=','B')->count() * Bus::NEEDED_SLOTS;
+        $trucks = $vehicles->where('category','=','C')->count() * Truck::NEEDED_SLOTS;
+
+        return Parking::$CAPACITY - $cars - $buses - $trucks;
     }
 
     public static function getTaxForTheDayEntered(int $startingHour, int $startingMinutes, int $priceDay, int $priceNight, int $endingHour = 24, int $endingMinutes = 0): int
@@ -56,43 +65,34 @@ class Parking
         $sum = 0;
         if ( $startingHour == $endingHour && $startingMinutes < $endingMinutes)
         {
-            if( $startingHour >= 8 && $startingHour < 18)
+            if( $startingHour >= self::INTERVAL_2_START && $startingHour < self::INTERVAL_2_END)
             {
                 return $priceDay;
             }
-            //@review the 2 if-s below could be merged together; Or just use an else?
-            if ( $startingHour >= 18 && $startingHour < 24)
-            {
-                return $priceNight;
-            }
-            if($startingHour >= 0 && $startingHour < 8)
-            {
-                return $priceNight;
-            }
+            return $priceNight;
         }
-
-        if ($startingHour >= 8 && $startingHour < 18) {
-            if ($endingHour < 18 && $endingMinutes <= 59) {
+        if ($startingHour >= self::INTERVAL_2_START && $startingHour < self::INTERVAL_2_END) {
+            if ($endingHour < self::INTERVAL_2_END && $endingMinutes <= 59) {
                 return ($endingHour - $startingHour) * $priceDay;
             }
-            $sum += (18 - $startingHour) * $priceDay;
-            if ($endingHour < 24 && $endingMinutes <= 59) {
-                $sum += ($endingHour - 18) * $priceNight;
+            $sum += (self::INTERVAL_2_END - $startingHour) * $priceDay;
+            if ($endingHour < self::INTERVAL_3_END && $endingMinutes <= 59) {
+                $sum += ($endingHour - self::INTERVAL_2_END) * $priceNight;
                 return $sum;
             }
-
-        } else if ($startingHour >= 0 && $startingHour < 8) {
-            if ($endingHour < 8 && $endingMinutes <= 59) {
+        } else if ($startingHour >= self::INTERVAL_1_START && $startingHour < self::INTERVAL_1_END) {
+            if ($endingHour < self::INTERVAL_1_END && $endingMinutes <= 59) {
                 return ($endingHour - $startingHour) * $priceNight;
             }
-            $sum += (8 - $startingHour) * $priceNight;
-            if ($endingHour <= 18) {
+            $sum += (self::INTERVAL_1_END - $startingHour) * $priceNight;
+            if ($endingHour <= self::INTERVAL_2_END) {
+                // 10 is the span of the second interval
                 return $sum + 10 * $priceDay;
             }
             $sum += 10 * $priceDay;
-            if($endingHour < 24 && $endingMinutes <= 59)
+            if($endingHour < self::INTERVAL_3_END && $endingMinutes <= 59)
             {
-                 return $sum + ($endingHour - 18) * $priceNight;
+                 return $sum + ($endingHour - self::INTERVAL_3_START) * $priceNight;
             }
         } else {
             return  ($endingHour - $startingHour) * $priceNight;
@@ -100,25 +100,9 @@ class Parking
         return $sum;
     }
 
-    /**
-     * @throws UnknownCardTypeException
-     */
     public static function priceWithDiscountCard(string $discountCardType, float $price): float
     {
-        //@review Already discussed - this should not be hardcoded like this; Minor- the code is not well formatted
-        if($discountCardType == "Silver")
-        {
-            return $price - $price / 10;
-        }
-
-        if($discountCardType == "Gold")
-        {
-            return $price - ($price * 100 / (100/15))/100;
-        }
-        if($discountCardType == "Platinum")
-        {
-            return $price - ($price * 100 / 5) /100;
-        }
-        throw new UnknownCardTypeException;
+       $discount =  DiscountCard::where('type', $discountCardType)->first()['discount'];
+       return $price - $price * $discount;
     }
 }

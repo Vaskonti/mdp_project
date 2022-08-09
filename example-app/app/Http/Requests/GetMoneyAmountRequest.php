@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CarPostRequest extends FormRequest
+class GetMoneyAmountRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,8 @@ class CarPostRequest extends FormRequest
     public function rules()
     {
         return [
-            'registrationPlate' => 'string|required|max:10',
-            'brand' => 'string|required',
-            'model' => 'string|required',
-            'color' => 'string|required',
-            'category' => 'string|exists:mysql.categories,category',
-            'card' => 'string|exists:mysql.discount_cards,type'
+            'dateStart' => 'required|date',
+            'dateEnd' => 'date'
         ];
     }
 }

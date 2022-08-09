@@ -22,7 +22,7 @@ class Vehicle extends MongoModel
     //@review not something major, but in general the db columns and in that number mongo fields should be lowercase_separated_by_underscores
     protected $fillable = ['registrationPlate', 'brand', 'model', 'color', 'entered', 'category', 'card', 'sumPaid'];
 
-    public function newFromBuilder($attributes = [], $connection = null)
+    public function newFromBuilder($attributes = [], $connection = null): Bus|Truck|Car|Vehicle
     {
         $model = match ($attributes['category']) {
             'A' => new Car($attributes),
@@ -30,14 +30,8 @@ class Vehicle extends MongoModel
             'C' => new Truck($attributes),
             default => $this->newInstance(),
         };
-
         $model->exists = true;
-
-        $model->setRawAttributes((array) $attributes, true);
-
-        //@review what is the need for this?
-        $model->setConnection($connection ?: $this->connection);
-
+        $model->setRawAttributes((array)$attributes, true);
         return $model;
     }
     protected function getPrices(): array
@@ -46,5 +40,10 @@ class Vehicle extends MongoModel
             'day' => 0,
             'night' => 0
         ];
+    }
+
+    public static function vehicleInsideParking(string $registrationPlate)
+    {
+        return Vehicle::where('registrationPlate','=',$registrationPlate)->whereNull('exited')->exists();
     }
 }

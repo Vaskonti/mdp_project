@@ -3,61 +3,34 @@
 namespace App\Http\Controllers;
 
 //@review there are includes here that are not used;
-// InvalidCategoryException will throw errors as it no longer exists; When deleting/renaming files use the refactor functionality of the IDE to avoid such leftovers
 use App\Events\CarExitEvent;
 use App\Events\CarRegisterEvent;
-use App\Exceptions\InvalidCategoryException;
 use App\Exceptions\InvalidDatePeriodException;
 use App\Exceptions\NoFreeSlotsException;
 use App\Helpers\Parking;
 use App\Http\Requests\CarPostRequest;
-use App\Models\Category;
-use App\Models\Mongo\Bus;
-use App\Models\Mongo\Car;
-use App\Models\Mongo\Truck;
+use App\Http\Requests\ExitParkingRequest;
+use App\Http\Requests\GetMoneyAmountRequest;
+use App\Models\Mongo\Factories\VehicleFactory;
 use App\Models\Mongo\Vehicle;
-use GuzzleHttp\Psr7\Request;
+use Exception;
+use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use function PHPUnit\Framework\isEmpty;
-use function PHPUnit\Framework\isNull;
 
 class CarsController extends Controller
 {
-
-    public function test() {
-        //@review you get 0 with the query because you have stored the data in mongo as strings
-        $res = Vehicle::sum('sumPaid');
-
-       dd($res);
-    }
-
     public function enterParking(CarPostRequest $request)
     {
-        //@review this could have been part of the vehicle model; also you don't need the first vehicle; you should be using ->exists()
-        $carInDB = Vehicle::where('registrationPlate','=',$request['registrationPlate'])->first();
-        if ($carInDB && !$carInDB->exited)
-        {
-            //@review it is ok
+        if (Vehicle::vehicleInsideParking($request['registrationPlate'])) {
             return response([
                 'message' => 'Cannot register car! Car is already registered and has not left!',
             ], 422);
         }
         try {
             //@review there is a design pattern that fits perfectly and could be used here
-            $category = $request['category'];
-            $car = "";
-            // @review code formatting is questionable (braces should start at the end of the line)
-            if ($category == "A")
-            {
-                $car = new Car($request->toArray());
-            }
-            else if($category == "B") {
-                $car = new Bus($request->toArray());
-            } else {
-                $car = new Truck($request->toArray());
-            }
+            $car = VehicleFactory::build($request->toArray());
             $car->card = $request['card'];
             $freeSlots = Parking::getFreeParkingSlots();
             if ($freeSlots <= 0 || $freeSlots - $car->getNeededSlots() < 0) {
@@ -70,7 +43,7 @@ class CarsController extends Controller
             return response([
                 'message' => 'Vehicle entered parking lot successfully!'
             ], 200);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             //@review this is nice
             Log::error($exception->getMessage());
 
@@ -80,16 +53,9 @@ class CarsController extends Controller
         }
     }
 
-    public function exitParking(\Illuminate\Http\Request $request)
+    public function exitParking(ExitParkingRequest $request)
     {
-        //@review this could have been validated in a request class; You should try to better separate logic
-        if (!isset($request['registrationPlate'])) {
-            return response([
-                'message' => 'You must provide registration plate!'
-            ], 408);
-        }
-
-//@review if I enter 2 times with the same vehicle - here the first time will be retunred and the vehicle will not be found!
+        //@review if I enter 2 times with the same vehicle - here the first time will be returned and the vehicle will not be found!
         $car = Vehicle::where('registrationPlate', '=', $request['registrationPlate'])->first();
         if (!$car->exists() || isset($car->exited)) {
             return response([
@@ -97,13 +63,13 @@ class CarsController extends Controller
             ], 404);
         }
 
-        $categoryPrice = number_format(Parking::determinePrice($car), 2);
+        $categoryPrice = Parking::determinePrice($car);
         //@review there was no validation for the card so I simply entered "card" as value; What will happen - We'll start getting exceptions (UnknownCardTypeException)
         // you could number_format a little later so it is not repeated in the code;
         if ($car->card) {
-            $categoryPrice = number_format(Parking::priceWithDiscountCard($car->card, $categoryPrice), 2);
+            $categoryPrice = Parking::priceWithDiscountCard($car->card, $categoryPrice);
         }
-        $car->sumPaid = $categoryPrice;
+        $car->sumPaid = number_format($categoryPrice, 2);
         $car->save();
         CarExitEvent::dispatch($car);
         return response([
@@ -122,22 +88,22 @@ class CarsController extends Controller
 
     public function checkSum(string $registrationPlate)
     {
-        $car = Vehicle::where('registrationPlate', '=', $registrationPlate)->first();
-
-        if (!$car || $car->exited) {
+        if(!Vehicle::vehicleInsideParking($registrationPlate))
+        {
             return response([
                 'message' => 'The car is not registered in the parking system!'
             ], 404);
         }
 
+        $car = Vehicle::where('registrationPlate', '=', $registrationPlate)->first();
 
-        $categoryPrice = Cache::remember('current_sum'.$registrationPlate,now()->addHour(), function () use (&$car) {
+        $categoryPrice = Cache::remember('current_sum' . $registrationPlate, now()->addHour(), function () use (&$car) {
             //@review this is a little code duplication
-            $categoryPrice = number_format(Parking::determinePrice($car), 2);
+            $categoryPrice = Parking::determinePrice($car);
             if ($car->card) {
-                $categoryPrice = number_format(Parking::priceWithDiscountCard($car->card, $categoryPrice), 2);
+                $categoryPrice = Parking::priceWithDiscountCard($car->card, $categoryPrice);
             }
-            return $categoryPrice;
+            return number_format($categoryPrice);
         });
 
         return response([
@@ -147,108 +113,72 @@ class CarsController extends Controller
 
     /**
      * @throws InvalidDatePeriodException
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getNumberOfCarsForPeriod(\Illuminate\Http\Request $request)
+    public function getNumberOfCarsForPeriod(GetMoneyAmountRequest $request): Response
     {
-        $dateStart = "";
-        $dateEnd = "";
-        $this->assignParams($request,$dateStart,$dateEnd);
+        $dates = $this->assignParams($request);
+        $dateStart = $dates['dateStart'];
+        $dateEnd = $dates['dateEnd'];
 
-        if ($dateStart && $dateEnd) {
-            $carsCached = Cache::remember('numberOfCars:start-'.$dateStart.':end-'.$dateEnd, now()->addDay(), function() use ($dateStart, $dateEnd){
-                return Vehicle::whereBetween('created_at', [$dateStart,$dateEnd])->count();
-            });
-            //@review the IDE is trying to help you here; the dates are defined above as strings and then transformed outside of this function to carbon objects;
-            // It would be nice to also format the dates that are part of the chache key
-            return response([
-                'message' => 'The number of unique cars entered the parking for the period (' . $dateStart->format('d-m-Y') . ' to ' . $dateEnd->format('d-m-Y') . ') lot is: ' . $carsCached
-            ], 200);
+        if (!isset($dateEnd)) {
+            $dateEnd = new Carbon($dateStart);
+            $dateEnd->addDay()->setHour(0)->setMinute(0);
         }
-        if($dateStart && !$dateEnd)
-        {
-            $copy = new Carbon($dateStart);
-            $copy->addDay();
-            $carsCached = Cache::remember('numberOfCars:day-'.$dateStart, now()->addDay(), function() use ($dateStart, $copy) {
-                return Vehicle::whereBetween('created_at', [$dateStart, $copy])->count();
-            });
 
-            return response([
-                'message' => 'The number of unique cars for the date ('.$dateStart->format('d-m-Y').') is: '.$carsCached
-            ], 200);
-        }
+        $carsCached = Cache::remember('numberOfCars:start-' . $dateStart->format('m-d-Y') . ':end-' . $dateEnd->format('m-d-Y'), now()->addDay(), function () use ($dateStart, $dateEnd) {
+            return Vehicle::whereBetween('created_at', [$dateStart, $dateEnd])->count();
+        });
 
         return response([
-            'message' => 'Something went wrong! :('
-        ], 500);
+            'message' => 'The number of unique cars entered the parking for the period (' . $dateStart->format('d-m-Y') . ' to ' . $dateEnd->format('d-m-Y') . ') lot is: ' . $carsCached
+        ], 200);
+
+
     }
 
 
     /**
      * @throws InvalidDatePeriodException
      */
-    public function getMoneyAmountForPeriod(\Illuminate\Http\Request $request)
+    public function getMoneyAmountForPeriod(GetMoneyAmountRequest $request): Response
     {
-        $dateStart = "";
-        $dateEnd = "";
-        $this->assignParams($request,$dateStart,$dateEnd);
+        $dates = $this->assignParams($request);
 
-        $sum = 0;
-        if($dateStart && $dateEnd)
-        {
-            //@review
-            $cars = Vehicle::whereNotNull('sumPaid')->whereBetween('exited', [$dateStart,$dateEnd])->get(['sumPaid']);
-            // maybe this should be somewhere else;
-            //Why do you loop the cars? This is not how an aggregation should be done.
-            foreach ($cars as $car) {
-                $sum += $car->sumPaid;
-            }
-            return response([
-                'message' => 'The money earned for the period ('.$dateStart->format('d-m-Y').' to '.$dateEnd->format('d-m-Y').') are: '.$sum.' lv.'
-            ], 200);
+        $dateStart = $dates['dateStart'];
+        $dateEnd = $dates['dateEnd'];
+        if (!isset($dateEnd)) {
+            $dateEnd = new Carbon($dateStart);
+            $dateEnd->addDay()->setHour(0)->setMinute(0);
         }
 
-        if($dateStart && !$dateEnd)
-        {
-            //@review code dupllication
-            $dateCopy = new Carbon($dateStart);
-            $dateCopy->addDay();
+        $carsSum = Cache::remember('moneyEarned:' . $dateStart->format('d-m-Y') . '-' . $dateEnd->format('d-m-Y'), now()->addMonth(),
+            function () use ($dateStart, $dateEnd) {
+                return Vehicle::whereNotNull('sumPaid')->whereBetween('exited', [$dateStart, $dateEnd])->get()->sum('sumPaid');
+            });
 
-            $cars = Vehicle::whereNotNull('sumPaid')->whereBetween('exited', [$dateStart,$dateCopy])->get(['sumPaid']);
-            foreach ($cars as $car) {
-                $sum += $car->sumPaid;
-            }
-            return response([
-                'message' => 'The money earned for  ('.$dateStart->format('d-m-Y').') are: '.$sum.' lv.'
-            ], 200);
-        }
-
-        throw new InvalidDatePeriodException();
+        return response([
+            'message' => 'The money earned for the period (' . $dateStart->format('d-m-Y') . ' to ' . $dateEnd->format('d-m-Y') . ') are: ' . $carsSum . ' lv.'
+        ], 200);
 
     }
 
     /**
      * @throws InvalidDatePeriodException
      */
-    private function assignParams($request, &$dateStart, &$dateEnd)
+    private function assignParams($request): array
     {
-        //@review I guess this was extracted here to avoid code repetition;
-        //A little over engineered. First this could have been done in a request class where the validation is preferred to be
-        // you have the parameters in $request why pass empty strings &$dateStart, &$dateEnd? just return an array with the two dates
-        //
-        $dateStart = $request->get('dateStart');
-        $dateEnd = $request->get('dateEnd');
 
-        if (isset($dateStart)) {
-            $dateStart = new Carbon($dateStart);
+        $dateStart = new Carbon($request->get('dateStart'));
+        $dateEnd = $request->get('dateEnd') !== null ? new Carbon($request->get('dateEnd')) : null;
+
+        if ($dateEnd && $dateStart > $dateEnd) {
+            throw new InvalidDatePeriodException();
         }
 
-        if (isset($dateEnd)) {
-            $dateEnd = new Carbon($dateEnd);
-        }
-
-        if ($dateStart > $dateEnd && $dateStart && $dateEnd) {
-            throw new InvalidDatePeriodException;
-        }
+        return [
+            'dateStart' => $dateStart,
+            'dateEnd' => $dateEnd
+        ];
     }
 }
