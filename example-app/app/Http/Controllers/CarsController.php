@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+//@review there are includes here that are not used;
+// InvalidCategoryException will throw errors as it no longer exists; When deleting/renaming files use the refactor functionality of the IDE to avoid such leftovers
 use App\Events\CarExitEvent;
 use App\Events\CarRegisterEvent;
 use App\Exceptions\InvalidCategoryException;
@@ -23,28 +25,39 @@ use function PHPUnit\Framework\isNull;
 
 class CarsController extends Controller
 {
+
+    public function test() {
+//        $res = Vehicle::whereNotNull('entered')
+//            ->whereNull('exited')
+//            ->sum('sumPaid');
+//        dd($res);
+//        $car = Vehicle::where('registrationPlate', '=', "A11")->first();
+//        dd($car);
+    }
+
     public function enterParking(CarPostRequest $request)
     {
+        //@review this could have been part of the vehicle model; also you don't need the first vehicle; you should be using ->exists()
         $carInDB = Vehicle::where('registrationPlate','=',$request['registrationPlate'])->first();
         if ($carInDB && !$carInDB->exited)
         {
+            //@review it is ok
             return response([
                 'message' => 'Cannot register car! Car is already registered and has not left!',
             ], 422);
         }
         try {
+            //@review there is a design pattern that fits perfectly and could be used here
             $category = $request['category'];
             $car = "";
+            // @review code formatting is questionable (braces should start at the end of the line)
             if ($category == "A")
             {
                 $car = new Car($request->toArray());
             }
-            else if($category == "B")
-            {
+            else if($category == "B") {
                 $car = new Bus($request->toArray());
-            }
-            else
-            {
+            } else {
                 $car = new Truck($request->toArray());
             }
             $car->card = $request['card'];
@@ -54,11 +67,13 @@ class CarsController extends Controller
             }
             $car->save();
 
+            //@review Practicing events is ok, but here there is no need for creating a car and adding its timestamp
             CarRegisterEvent::dispatch($car);
             return response([
                 'message' => 'Vehicle entered parking lot successfully!'
             ], 200);
         } catch (\Exception $exception) {
+            //@review this is nice
             Log::error($exception->getMessage());
 
             return response([
@@ -69,12 +84,14 @@ class CarsController extends Controller
 
     public function exitParking(\Illuminate\Http\Request $request)
     {
+        //@review this could have been validated in a request class; You should try to better separate logic
         if (!isset($request['registrationPlate'])) {
             return response([
                 'message' => 'You must provide registration plate!'
             ], 408);
         }
 
+//@review if I enter 2 times with the same vehicle - here the first time will be retunred and the vehicle will not be found!
         $car = Vehicle::where('registrationPlate', '=', $request['registrationPlate'])->first();
         if (!$car->exists() || isset($car->exited)) {
             return response([
@@ -83,6 +100,8 @@ class CarsController extends Controller
         }
 
         $categoryPrice = number_format(Parking::determinePrice($car), 2);
+        //@review there was no validation for the card so I simply entered "card" as value; What will happen - We'll start getting exceptions (UnknownCardTypeException)
+        // you could number_format a little later so it is not repeated in the code;
         if ($car->card) {
             $categoryPrice = number_format(Parking::priceWithDiscountCard($car->card, $categoryPrice), 2);
         }
@@ -96,6 +115,7 @@ class CarsController extends Controller
 
     public function getFreeSlots()
     {
+        //@review ok
         $capacity = Parking::getFreeParkingSlots();
         return response([
             'message' => 'Available parking slots are ' . $capacity,
@@ -114,6 +134,7 @@ class CarsController extends Controller
 
 
         $categoryPrice = Cache::remember('current_sum'.$registrationPlate,now()->addHour(), function () use (&$car) {
+            //@review this is a little code duplication
             $categoryPrice = number_format(Parking::determinePrice($car), 2);
             if ($car->card) {
                 $categoryPrice = number_format(Parking::priceWithDiscountCard($car->card, $categoryPrice), 2);
@@ -140,6 +161,8 @@ class CarsController extends Controller
             $carsCached = Cache::remember('numberOfCars:start-'.$dateStart.':end-'.$dateEnd, now()->addDay(), function() use ($dateStart, $dateEnd){
                 return Vehicle::whereBetween('created_at', [$dateStart,$dateEnd])->count();
             });
+            //@review the IDE is trying to help you here; the dates are defined above as strings and then transformed outside of this function to carbon objects;
+            // It would be nice to also format the dates that are part of the chache key
             return response([
                 'message' => 'The number of unique cars entered the parking for the period (' . $dateStart->format('d-m-Y') . ' to ' . $dateEnd->format('d-m-Y') . ') lot is: ' . $carsCached
             ], 200);
@@ -175,7 +198,10 @@ class CarsController extends Controller
         $sum = 0;
         if($dateStart && $dateEnd)
         {
+            //@review
             $cars = Vehicle::whereNotNull('sumPaid')->whereBetween('exited', [$dateStart,$dateEnd])->get(['sumPaid']);
+            // maybe this should be somewhere else;
+            //Why do you loop the cars? This is not how an aggregation should be done.
             foreach ($cars as $car) {
                 $sum += $car->sumPaid;
             }
@@ -186,6 +212,7 @@ class CarsController extends Controller
 
         if($dateStart && !$dateEnd)
         {
+            //@review code dupllication
             $dateCopy = new Carbon($dateStart);
             $dateCopy->addDay();
 
@@ -207,6 +234,10 @@ class CarsController extends Controller
      */
     private function assignParams($request, &$dateStart, &$dateEnd)
     {
+        //@review I guess this was extracted here to avoid code repetition;
+        //A little over engineered. First this could have been done in a request class where the validation is preferred to be
+        // you have the parameters in $request why pass empty strings &$dateStart, &$dateEnd? just return an array with the two dates
+        //
         $dateStart = $request->get('dateStart');
         $dateEnd = $request->get('dateEnd');
 

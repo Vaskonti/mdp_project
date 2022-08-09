@@ -19,6 +19,7 @@ class Vehicle extends MongoModel
     protected $collection = 'cars';
     protected $connection = 'mongodb';
     protected $dates = ['entered', 'exited'];
+    //@review not something major, but in general the db columns and in that number mongo fields should be lowercase_separated_by_underscores
     protected $fillable = ['registrationPlate', 'brand', 'model', 'color', 'entered', 'category', 'card', 'sumPaid'];
 
     public function newFromBuilder($attributes = [], $connection = null)
@@ -34,6 +35,7 @@ class Vehicle extends MongoModel
 
         $model->setRawAttributes((array) $attributes, true);
 
+        //@review what is the need for this?
         $model->setConnection($connection ?: $this->connection);
 
         return $model;

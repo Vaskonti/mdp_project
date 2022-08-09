@@ -38,9 +38,12 @@ class Parking
 
     public static function getFreeParkingSlots()
     {
-        $cars = Vehicle::whereNotNull('entered')->whereNull('exited')->get();
+        $cars = Vehicle::whereNotNull('entered')
+            ->whereNull('exited')
+            ->get();
         $capacity = Parking::$CAPACITY;
-
+        //@review a step better would have been to use the sum function to calculate the currently taken slots;
+        //even better would have been to retrieve the number of vehicles for each category and then just multiply by the slots that each category takes;
         foreach ($cars as $car) {
             $capacity -= $car->getNeededSlots();
         }
@@ -49,6 +52,7 @@ class Parking
 
     public static function getTaxForTheDayEntered(int $startingHour, int $startingMinutes, int $priceDay, int $priceNight, int $endingHour = 24, int $endingMinutes = 0): int
     {
+        //@review This one is hard to follow; try extracting to smaller functions; Those 8/18/24-s should not be hardcoded like that;
         $sum = 0;
         if ( $startingHour == $endingHour && $startingMinutes < $endingMinutes)
         {
@@ -56,6 +60,7 @@ class Parking
             {
                 return $priceDay;
             }
+            //@review the 2 if-s below could be merged together; Or just use an else?
             if ( $startingHour >= 18 && $startingHour < 24)
             {
                 return $priceNight;
@@ -100,6 +105,7 @@ class Parking
      */
     public static function priceWithDiscountCard(string $discountCardType, float $price): float
     {
+        //@review Already discussed - this should not be hardcoded like this; Minor- the code is not well formatted
         if($discountCardType == "Silver")
         {
             return $price - $price / 10;
