@@ -56,7 +56,7 @@ class CarsController extends Controller
     public function exitParking(ExitParkingRequest $request)
     {
         //@review if I enter 2 times with the same vehicle - here the first time will be returned and the vehicle will not be found!
-        $car = Vehicle::where('registrationPlate', '=', $request['registrationPlate'])->first();
+        $car = Vehicle::where('registrationPlate', '=', $request['registrationPlate'])->latest()->first();
         if (!$car->exists() || isset($car->exited)) {
             return response([
                 'message' => 'Vehicle not found!',
