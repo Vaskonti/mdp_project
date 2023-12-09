@@ -45,4 +45,4 @@ jobs:
       - name: Run database migrations
         run: php artisan migrate
         env:
-          DB_PORT: {{ $job.services.mysql-service.ports[3306]}}
+          DB_PORT: ${{ job.services.mysql-service.ports[3306]}}
