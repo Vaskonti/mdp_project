@@ -46,4 +46,4 @@ jobs:
           DB_DATABASE: parking
           DB_USERNAME: root
           DB_PASSWORD: password
-        run: php artisan migrate --force
+        run: php artisan migrate:fresh --force
