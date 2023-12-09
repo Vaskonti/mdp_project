@@ -34,16 +34,16 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Set up environment
-        run: cp .env.ci .env
-
       - name: Generate application key
         run: php artisan key:generate
+
       - name: Clear Config
         run: php artisan config:clear
 
       - name: Run database migrations
-        run: php artisan migrate
+        run: |
+          cp .env.ci .env
+          php artisan migrate
 #        env:
 #          DB_PORT: ${{ job.services.mysql-service.ports[3306]}}
 #          DB_HOST: 127.0.0.1
