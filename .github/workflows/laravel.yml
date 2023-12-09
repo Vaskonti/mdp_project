@@ -34,8 +34,6 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Generate application key
-        run: php artisan key:generate
 
       - name: Clear Config
         run: php artisan config:clear
@@ -43,6 +41,7 @@ jobs:
       - name: Run database migrations
         run: |
           cp .env.ci .env
+          php artisan key:generate
           php artisan migrate
 #        env:
 #          DB_PORT: ${{ job.services.mysql-service.ports[3306]}}
