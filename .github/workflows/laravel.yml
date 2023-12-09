@@ -36,12 +36,7 @@ jobs:
         run: cp .env.example .env
 
       - name: Generate application key
-        run: php artisan key:generate
-
-      - name: Start MySQL
-        run:  sudo /etc/init.d/mysql start
-      - name: Create default schema (database) in MySQL
-        
+        run: php artisan key:generate 
 
       - name: Run database migrations
         run: php artisan migrate --force
