@@ -27,8 +27,8 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'  # You can adjust the PHP version
-
+          php-version: '8.1'
+          extensions: mysql
       - name: Composer Update
         run: composer update
       - name: Install Composer dependencies
