@@ -14,9 +14,11 @@ jobs:
         image: mysql:8
         env:
           MYSQL_DATABASE: parking
+          MYSQL_USER: admin
           MYSQL_ROOT_PASSWORD: password
+          MYSQL_PASSWORD: password
         ports:
-          - 33306:3306
+          - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Checkout code
@@ -41,11 +43,4 @@ jobs:
         run: cat /var/log/mysql/error.log
 
       - name: Run database migrations
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: mysql
-          DB_PORT: 3306
-          DB_DATABASE: parking
-          DB_USERNAME: root
-          DB_PASSWORD: password
         run: php artisan migrate:fresh --force
