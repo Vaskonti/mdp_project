@@ -37,10 +37,6 @@ jobs:
 
       - name: Generate application key
         run: php artisan key:generate
-      - name: Debug DNS Resolution
-        run: |
-          ping mysql
-          nslookup mysql
       - name: Display MySQL logs
         run: cat /var/log/mysql/error.log
 
