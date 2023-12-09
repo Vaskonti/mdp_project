@@ -39,8 +39,8 @@ jobs:
 
       - name: Generate application key
         run: php artisan key:generate
-      - name: Display MySQL logs
-        run: cat /var/log/mysql/error.log
+      - name: Clear Config
+        run: php artisan config:clear
 
       - name: Run database migrations
         run: php artisan migrate
