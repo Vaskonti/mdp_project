@@ -28,7 +28,12 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-          extensions: mysql
+          extensions: mysql, mongodb
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.10.0
+        with:
+            mongodb-version: '4.4.9'
+            mongodb-port: 27017
       - name: Composer Update
         run: composer update
       - name: Install Composer dependencies
