@@ -43,4 +43,10 @@ jobs:
         run: cat /var/log/mysql/error.log
 
       - name: Run database migrations
+        env:
+          DB_HOST:mysql
+          DB_PORT:3306
+          DB_DATABASE:parking
+          DB_USERNAME:root
+          DB_PASSWORD:password
         run: php artisan migrate:fresh --force
