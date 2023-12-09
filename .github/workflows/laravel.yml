@@ -39,6 +39,8 @@ jobs:
       - name: Generate application key
         run: php artisan key:generate
 
+      - name: Start MySQL
+        run:  sudo /etc/init.d/mysql start
       - name: Create default schema (database) in MySQL
         run: |
             mysql -u admin -ppassword -e "CREATE DATABASE parking;"
