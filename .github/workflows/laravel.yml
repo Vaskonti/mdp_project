@@ -34,6 +34,9 @@ jobs:
         with:
             mongodb-version: '4.4.9'
             mongodb-port: 27017
+            mongodb-username: root
+            mongodb-password: password
+            mongodb-db: parking
       - name: Composer Update
         run: composer update
       - name: Install Composer dependencies
