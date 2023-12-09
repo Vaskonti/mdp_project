@@ -41,8 +41,7 @@ jobs:
       - name: Start MySQL
         run:  sudo /etc/init.d/mysql start
       - name: Create default schema (database) in MySQL
-        run: |
-            mysql -u root -e "CREATE DATABASE parking;"
+        
 
       - name: Run database migrations
         run: php artisan migrate --force
