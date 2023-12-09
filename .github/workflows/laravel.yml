@@ -15,7 +15,7 @@ jobs:
           env:
             MYSQL_ROOT_PASSWORD: root_password
             MYSQL_DATABASE: parking
-            MYSQL_USER: root
+            MYSQL_USER: admin
             MYSQL_PASSWORD: password
             MYSQL_ALLOW_EMPTY_PASSWORD: yes
           options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
