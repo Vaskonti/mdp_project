@@ -10,36 +10,38 @@ jobs:
   migrate:
     runs-on: ubuntu-latest
     services:
-        mysql:
-          image: mysql:8
-          env:
-            MYSQL_ROOT_PASSWORD: root_password
-            MYSQL_DATABASE: parking
-            MYSQL_USER: admin
-            MYSQL_PASSWORD: password
-            MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: parking
+          MYSQL_USER: admin
+          MYSQL_PASSWORD: password
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.1'  # You can adjust the PHP version
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'  # You can adjust the PHP version
 
-    - name: Composer Update
-      run: composer update
-    - name: Install Composer dependencies
-      run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Composer Update
+        run: composer update
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-    - name: Set up environment
-      run: cp .env.example .env
-          
-    - name: Generate application key
-      run: php artisan key:generate
+      - name: Set up environment
+        run: cp .env.example .env
 
-    - name: Wait for mysql
-      run: sleep 30
-    - name: Run database migrations
-      run: php artisan migrate --force
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Create default schema (database) in MySQL
+        run: |
+            mysql -u admin -ppassword -e "CREATE DATABASE parking;"
+
+      - name: Run database migrations
+        run: php artisan migrate --force
