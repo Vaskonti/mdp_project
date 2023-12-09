@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mysql_drivers_categories_pivot');
+        Schema::connection('mysql')->dropIfExists('drivers_categories_pivot');
     }
 };

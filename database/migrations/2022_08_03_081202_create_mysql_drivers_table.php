@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mysql_drivers');
+        Schema::connection('mysql')->dropIfExists('drivers');
     }
 };

@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mysql_discount_cards');
+        Schema::connection('mysql')->dropIfExists('discount_cards');
     }
 };
