@@ -1,0 +1,39 @@
+name: Laravel
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  migrate:
+    services:
+        mysql:
+          image: mysql:8
+          env:
+            MYSQL_ROOT_PASSWORD: root_password
+            MYSQL_DATABASE: your_database
+            MYSQL_USER: your_username
+            MYSQL_PASSWORD: your_password
+          options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'  # You can adjust the PHP version
+
+    - name: Install Composer dependencies
+      run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+    - name: Set up environment
+      run: cp .env.example .env
+          
+    - name: Generate application key
+      run: php artisan key:generate
+
+    - name: Run database migrations
+      run: php artisan migrate --force
