@@ -43,6 +43,6 @@ jobs:
           cp .env.ci .env
           php artisan key:generate
           php artisan migrate
-#        env:
-#          DB_PORT: ${{ job.services.mysql-service.ports[3306]}}
-#          DB_HOST: 127.0.0.1
+        env:
+          DB_PORT: ${{ job.services.mysql-service.ports[3306]}}
+          DB_HOST: 127.0.0.1
