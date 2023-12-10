@@ -19,16 +19,6 @@ jobs:
           php-version: '8.1'
           extensions: mysql, mongodb
 
-#      - name: Composer update
-#        run: composer update
-
-      - name: Install Composer dependencies
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Configure Laravel
-        run: |
-           cp .env.ci .env
-           php artisan key:generate
-           php artisan config:clear
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
@@ -39,6 +29,14 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Configure Laravel
+        run: |
+           cp .env.ci .env
+           php artisan key:generate
+           php artisan config:clear
 
       - name: Upload setup artifact
         uses: actions/upload-artifact@v2
