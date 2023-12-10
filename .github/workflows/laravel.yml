@@ -19,8 +19,8 @@ jobs:
           php-version: '8.1'
           extensions: mysql, mongodb
 
-      - name: Composer update
-        run: composer update
+#      - name: Composer update
+#        run: composer update
 
       - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
