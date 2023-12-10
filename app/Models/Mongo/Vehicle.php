@@ -4,7 +4,6 @@ namespace App\Models\Mongo;
 
 use App\Models\Parking;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model as MongoModel;
 
 class Vehicle extends MongoModel
 {

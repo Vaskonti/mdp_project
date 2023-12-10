@@ -5,14 +5,14 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.2",
         "elasticsearch/elasticsearch": "^7.5",
         "guzzlehttp/guzzle": "^7.2",
-        "jenssegers/mongodb": "^3.9",
-        "laravel/framework": "^9.19",
-        "laravel/sanctum": "^2.14.1",
-        "laravel/telescope": "^4.9",
+        "laravel/framework": "^10.0",
+        "laravel/sanctum": "^3.2",
+        "laravel/telescope": "^4.17.2",
         "laravel/tinker": "^2.7",
+        "mongodb/laravel-mongodb": "^4.0",
         "mongodb/mongodb": "^1.12",
         "predis/predis": "^2.2"
     },
@@ -23,7 +23,7 @@
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
         "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0"
+        "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -64,6 +64,6 @@
     },
     "repositories": [
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
