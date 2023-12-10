@@ -29,11 +29,24 @@ jobs:
            cp .env.ci .env
            php artisan key:generate
            php artisan config:clear
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v3
+        with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
+
       - name: Upload setup artifact
         uses: actions/upload-artifact@v2
         with:
           name: setup-artifact
-          path: ${{ github.workspace }}
+          path: |
+            ${{ github.workspace }}
+            !${{ github.workspace }}/vendor
           if-no-files-found: error
   migrate:
     runs-on: ubuntu-latest
