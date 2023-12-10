@@ -7,6 +7,30 @@ on:
     branches: [ "main" ]
 
 jobs:
+  setup-laravel:
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysql, mongodb
+
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Configure Laravel
+        run: |
+           cp .env.ci .env
+           php artisan key:generate
+           php artisan config:clear
+      - name: Upload setup artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: setup-artifact
+          path: ${{ github.workspace }}
+          if-no-files-found: error
   migrate:
     runs-on: ubuntu-latest
     services:
@@ -21,14 +45,6 @@ jobs:
           - 3306/tcp
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          extensions: mysql, mongodb
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.10.0
         with:
@@ -37,20 +53,11 @@ jobs:
             mongodb-username: root
             mongodb-password: password
             mongodb-db: parking
-      - name: Composer Update
-        run: composer update
-      - name: Install Composer dependencies
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-
-      - name: Clear Config
-        run: php artisan config:clear
-
-      - name: Run database migrations
-        run: |
-          cp .env.ci .env
-          php artisan key:generate
-          php artisan migrate
+      - name: Run migrations
+        run: php artisan migrate
+        with:
+          name: setup-artifact
         env:
           DB_PORT: ${{ job.services.mysql-service.ports[3306]}}
           DB_HOST: 127.0.0.1
