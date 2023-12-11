@@ -114,7 +114,7 @@ jobs:
           DB_HOST: 127.0.0.1
   Tests:
     runs-on: ubuntu-latest
-    needs: [PhpCodeSniffer, PhpStan]
+    needs: [PhpCSFixer, PhpStan]
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
