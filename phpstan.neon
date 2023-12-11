@@ -6,40 +6,6 @@ parameters:
     paths:
         - app
         - tests
-	- config
-	- database
-	- routes
-    # Autoloading strategy, change it based on your project setup
-    autoload_files:
-        - vendor/autoload.php
+        - database
+        - config
 
-    # Bootstrap file, if needed
-    bootstrap_files:
-        - bootstrap.php
-
-    # Configuration for the PHPStan extensions
-    parameters:
-        # (optional) List of memory limit options for PHPStan
-        memoryLimit: 1G
-
-        # (optional) List of custom rules
-        rules:
-            - '@PSR12'
-
-        # (optional) Paths to the file with rules (if you have custom ruleset)
-        # Custom ruleset is not mandatory, PHPStan has built-in rules for common standards
-        # rulesFile: customRules.neon
-
-        # (optional) Ignored errors (paths are relative to the analyzed paths)
-        ignoreErrors:
-            - '#^Call to an undefined method (.+::.+)\(\)$#'
-
-    # (optional) Configuration for extensions
-    extensions:
-        # Example extension configuration
-        - phpstan/phpstan-phpunit/phpunit-91.neon
-
-    # (optional) Paths to the custom ruleset files (if needed)
-    # Note: PHPStan supports rulesets in PHPStan 0.12.98 and later
-    # includes:
-    #     - rulesets/my-ruleset.neon
