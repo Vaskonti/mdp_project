@@ -12,7 +12,6 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 
 final class EventServiceProvider extends ServiceProvider
 {
-
     /**
      * The event to listener mappings for the application.
      *

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Listeners;
 
@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Log;
 
 final class CarRegisterListener
 {
-
     /**
      * Create the event listener.
      *

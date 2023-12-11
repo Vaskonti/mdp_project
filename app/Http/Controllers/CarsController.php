@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -21,10 +21,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-
 class CarsController extends Controller
 {
-
     public function enterParking(CarPostRequest $request)
     {
         if (Vehicle::vehicleInsideParking($request['registrationPlate'])) {
@@ -40,7 +38,7 @@ class CarsController extends Controller
             $freeSlots = Parking::getFreeParkingSlots();
 
             if ($freeSlots <= 0 || $freeSlots - $car->getNeededSlots() < 0) {
-                throw new NoFreeSlotsException;
+                throw new NoFreeSlotsException();
             }
 
             $car->save();
@@ -168,13 +166,16 @@ class CarsController extends Controller
             $dateEnd->addDay()->setHour(0)->setMinute(0);
         }
 
-        $carsSum = Cache::remember('moneyEarned:' . $dateStart->format('d-m-Y') . '-' . $dateEnd->format('d-m-Y'), \now()->addMonth(),
+        $carsSum = Cache::remember(
+            'moneyEarned:' . $dateStart->format('d-m-Y') . '-' . $dateEnd->format('d-m-Y'),
+            \now()->addMonth(),
             static fn () => Vehicle::whereNotNull('sumPaid')->whereBetween(
                 'exited',
                 [$dateStart, $dateEnd]
             )->get()->sum(
-                    'sumPaid'
-                ));
+                'sumPaid'
+            )
+        );
 
         return \response([
             'message' => 'The money earned for the period (' . $dateStart->format('d-m-Y') . ' to ' . $dateEnd->format(
@@ -193,7 +194,7 @@ class CarsController extends Controller
             : null;
 
         if ($dateEnd && $dateStart > $dateEnd) {
-            throw new InvalidDatePeriodException;
+            throw new InvalidDatePeriodException();
         }
 
         return [

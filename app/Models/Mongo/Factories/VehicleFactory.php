@@ -11,8 +11,7 @@ class VehicleFactory
 {
     public static function build(array $attributes)
     {
-        return match ($attributes['category'])
-        {
+        return match ($attributes['category']) {
             'A' => new Car($attributes),
             'B' => new Bus($attributes),
             'C' => new Truck($attributes),

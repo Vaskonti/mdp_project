@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Mail;
 
@@ -10,11 +10,10 @@ use Illuminate\Queue\SerializesModels;
 
 final class AggregationsMail extends Mailable
 {
-
     use Queueable;
     use SerializesModels;
 
-    const TEMPLATE = "email_aggregations";
+    public const TEMPLATE = "email_aggregations";
 
     private int $sumGenerated;
 
@@ -36,7 +35,7 @@ final class AggregationsMail extends Mailable
     public function build()
     {
         return $this->view(self::TEMPLATE)
-                    ->subject('Aggregations for:' )
+                    ->subject('Aggregations for:')
                     ->to(['admin@lab08.example.com'])
                     ->with($this->sumGenerated)
                     ->with($this->carsRegistered);

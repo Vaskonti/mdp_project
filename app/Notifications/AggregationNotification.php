@@ -11,7 +11,7 @@ class AggregationNotification extends Notification
 {
     use Queueable;
 
-    const TEMPLATE = "email_aggregations";
+    public const TEMPLATE = "email_aggregations";
 
     private int $sumGenerated;
     private int $carsRegistered;
@@ -47,7 +47,7 @@ class AggregationNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        return (new MailMessage())
                     ->line('The introduction to the notification.')
                     ->subject('Aggregations Notification')
                     ->markdown(self::TEMPLATE, [

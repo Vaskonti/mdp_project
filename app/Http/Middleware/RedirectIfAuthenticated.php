@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
@@ -10,11 +10,11 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+
 use function redirect;
 
 final class RedirectIfAuthenticated
 {
-
     /**
      * Handle an incoming request.
      *

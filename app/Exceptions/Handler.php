@@ -1,19 +1,17 @@
 <?php
 
-
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 final class Handler extends ExceptionHandler
 {
-
     /**
      * A list of exception types with their corresponding custom log levels.
      *
      * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
      */
-    protected  $levels = [
+    protected $levels = [
     ];
 
     /**
@@ -21,7 +19,7 @@ final class Handler extends ExceptionHandler
      *
      * @var array<int, class-string<\Throwable>>
      */
-    protected  $dontReport = [
+    protected $dontReport = [
     ];
 
     /**
@@ -29,7 +27,7 @@ final class Handler extends ExceptionHandler
      *
      * @var array<int, string>
      */
-    protected  $dontFlash = [
+    protected $dontFlash = [
         'current_password',
         'password',
         'password_confirmation',

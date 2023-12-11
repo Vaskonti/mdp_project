@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http;
 
 use App\Http\Middleware\Authenticate;
@@ -29,7 +28,6 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 final class Kernel extends HttpKernel
 {
-
     /**
      * The application's global HTTP middleware stack.
      *

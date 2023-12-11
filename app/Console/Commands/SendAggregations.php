@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Notification;
 
 final class SendAggregations extends Command
 {
-
     /**
      * The name and signature of the console command.
      */
@@ -41,11 +40,11 @@ final class SendAggregations extends Command
                 static function () use ($yesterday, $tomorrow) {
                     $carsExited = Vehicle::whereBetween('exited', [$yesterday, $tomorrow])->get();
                     $sum = 0;
-    
+
                     foreach ($carsExited as $item) {
                         $sum += $item->sumPaid;
                     }
-    
+
                     return $sum;
                 },
             );

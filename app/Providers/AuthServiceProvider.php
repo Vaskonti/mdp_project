@@ -7,7 +7,6 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 
 final class AuthServiceProvider extends ServiceProvider
 {
-
     /**
      * The model to policy mappings for the application.
      *

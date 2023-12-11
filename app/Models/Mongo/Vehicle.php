@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Models\Mongo;
 
@@ -9,7 +9,6 @@ use MongoDB\Laravel\Eloquent\Model;
 
 class Vehicle extends Model
 {
-
     use HasFactory;
 
     protected string $registrationPlate;
@@ -53,7 +52,7 @@ class Vehicle extends Model
 
     public static function vehicleInsideParking(string $registrationPlate)
     {
-        return self::where('registrationPlate','=',$registrationPlate)->whereNull('exited')->exists();
+        return self::where('registrationPlate', '=', $registrationPlate)->whereNull('exited')->exists();
     }
 
     protected function getPrices(): array

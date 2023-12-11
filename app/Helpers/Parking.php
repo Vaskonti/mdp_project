@@ -11,14 +11,14 @@ use Illuminate\Support\Carbon;
 
 class Parking
 {
-    const INTERVAL_1_START = 0;
-    const INTERVAL_1_END = 8;
+    public const INTERVAL_1_START = 0;
+    public const INTERVAL_1_END = 8;
 
-    const INTERVAL_2_START = 8;
-    const INTERVAL_2_END = 18;
+    public const INTERVAL_2_START = 8;
+    public const INTERVAL_2_END = 18;
 
-    const INTERVAL_3_START = 18;
-    const INTERVAL_3_END = 24;
+    public const INTERVAL_3_START = 18;
+    public const INTERVAL_3_END = 24;
 
     public static int $CAPACITY = 200;
 
@@ -39,10 +39,10 @@ class Parking
                 $sum += self::getTaxForTheDayEntered($startDate->hour, $startDate->minute, $priceDay, $priceNight);
                 $startDate->addDay()->setHours(0)->setMinutes(0);
             }
-            $sum += self::getTaxForTheDayEntered($startDate->hour,$startDate->minute, $priceDay, $priceNight, $timeNow->hour, $timeNow->minute);
+            $sum += self::getTaxForTheDayEntered($startDate->hour, $startDate->minute, $priceDay, $priceNight, $timeNow->hour, $timeNow->minute);
             return $sum;
         } else {
-            return self::getTaxForTheDayEntered($startDate->hour,$startDate->minute, $priceDay, $priceNight, $timeNow->hour, $timeNow->minute, );
+            return self::getTaxForTheDayEntered($startDate->hour, $startDate->minute, $priceDay, $priceNight, $timeNow->hour, $timeNow->minute, );
         }
 
     }
@@ -52,9 +52,9 @@ class Parking
         $vehicles = Vehicle::whereNotNull('entered')
             ->whereNull('exited')
             ->get();
-        $cars = $vehicles->where('category','=','A')->count() * Car::NEEDED_SLOTS;
-        $buses = $vehicles->where('category','=','B')->count() * Bus::NEEDED_SLOTS;
-        $trucks = $vehicles->where('category','=','C')->count() * Truck::NEEDED_SLOTS;
+        $cars = $vehicles->where('category', '=', 'A')->count() * Car::NEEDED_SLOTS;
+        $buses = $vehicles->where('category', '=', 'B')->count() * Bus::NEEDED_SLOTS;
+        $trucks = $vehicles->where('category', '=', 'C')->count() * Truck::NEEDED_SLOTS;
 
         return Parking::$CAPACITY - $cars - $buses - $trucks;
     }
@@ -63,10 +63,8 @@ class Parking
     {
         //@review This one is hard to follow; try extracting to smaller functions; Those 8/18/24-s should not be hardcoded like that;
         $sum = 0;
-        if ( $startingHour == $endingHour && $startingMinutes < $endingMinutes)
-        {
-            if( $startingHour >= self::INTERVAL_2_START && $startingHour < self::INTERVAL_2_END)
-            {
+        if ($startingHour == $endingHour && $startingMinutes < $endingMinutes) {
+            if($startingHour >= self::INTERVAL_2_START && $startingHour < self::INTERVAL_2_END) {
                 return $priceDay;
             }
             return $priceNight;
@@ -80,7 +78,7 @@ class Parking
                 $sum += ($endingHour - self::INTERVAL_2_END) * $priceNight;
                 return $sum;
             }
-        } else if ($startingHour >= self::INTERVAL_1_START && $startingHour < self::INTERVAL_1_END) {
+        } elseif ($startingHour >= self::INTERVAL_1_START && $startingHour < self::INTERVAL_1_END) {
             if ($endingHour < self::INTERVAL_1_END && $endingMinutes <= 59) {
                 return ($endingHour - $startingHour) * $priceNight;
             }
@@ -90,9 +88,8 @@ class Parking
                 return $sum + 10 * $priceDay;
             }
             $sum += 10 * $priceDay;
-            if($endingHour < self::INTERVAL_3_END && $endingMinutes <= 59)
-            {
-                 return $sum + ($endingHour - self::INTERVAL_3_START) * $priceNight;
+            if($endingHour < self::INTERVAL_3_END && $endingMinutes <= 59) {
+                return $sum + ($endingHour - self::INTERVAL_3_START) * $priceNight;
             }
         } else {
             return  ($endingHour - $startingHour) * $priceNight;
@@ -102,7 +99,7 @@ class Parking
 
     public static function priceWithDiscountCard(string $discountCardType, float $price): float
     {
-       $discount =  DiscountCard::where('type', $discountCardType)->first()['discount'];
-       return $price - $price * $discount;
+        $discount =  DiscountCard::where('type', $discountCardType)->first()['discount'];
+        return $price - $price * $discount;
     }
 }

@@ -1,16 +1,15 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Models\Mongo;
 
 final class Car extends Vehicle
 {
-
-    const NEEDED_SLOTS = 1;
-    const CATEGORY = "A";
-    const PRICE_DAY = 3;
-    const PRICE_NIGHT = 2;
+    public const NEEDED_SLOTS = 1;
+    public const CATEGORY = "A";
+    public const PRICE_DAY = 3;
+    public const PRICE_NIGHT = 2;
 
     protected $collection = 'cars';
     private readonly string $category;
