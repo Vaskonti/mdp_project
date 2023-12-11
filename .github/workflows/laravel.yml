@@ -7,6 +7,24 @@ on:
     branches: [ "main" ]
 
 jobs:
+  PhpStan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysql, mongodb
+      - name: Composer Install
+        run:  composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: PHP Stan
+        uses: php-actions/phpstan@v3
+        with:
+          path: .
+          level: 1
   CacheComposer:
     runs-on: ubuntu-latest
     steps:
