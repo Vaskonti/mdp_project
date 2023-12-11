@@ -2,10 +2,10 @@
 
 namespace App\Models\Mongo;
 
-use App\Models\Parking;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use MongoDB\Laravel\Eloquent\Model;
 
-class Vehicle extends MongoModel
+class Vehicle extends Model
 {
     use HasFactory;
 
@@ -17,9 +17,21 @@ class Vehicle extends MongoModel
 
     protected $collection = 'cars';
     protected $connection = 'mongodb';
-    protected $dates = ['entered', 'exited'];
+    protected $dates = [
+        'entered',
+        'exited',
+    ];
     //@review not something major, but in general the db columns and in that number mongo fields should be lowercase_separated_by_underscores
-    protected $fillable = ['registrationPlate', 'brand', 'model', 'color', 'entered', 'category', 'card', 'sumPaid'];
+    protected $fillable = [
+        'registrationPlate',
+        'brand',
+        'model',
+        'color',
+        'entered',
+        'category',
+        'card',
+        'sumPaid',
+    ];
 
     public function newFromBuilder($attributes = [], $connection = null): Bus|Truck|Car|Vehicle
     {

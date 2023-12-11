@@ -50,5 +50,6 @@ class ElasticIndex extends Command
             $params['type'] = 'car';
             $client->index($params);
         }
+        return 0;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use JetBrains\PhpStorm\Internal\LanguageLevelTypeAware;
+use Throwable;
 
 class NoFreeSlotsException extends Exception
 {
