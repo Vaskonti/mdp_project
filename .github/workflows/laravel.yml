@@ -78,7 +78,10 @@ jobs:
         env:
           DB_PORT: ${{ job.services.mysql-service.ports[3306]}}
           DB_HOST: 127.0.0.1
-    tests:
+    Tests:
+      runs-on: ubuntu-latest
+      needs: [CacheComposer]
+      steps:
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Set up PHP
