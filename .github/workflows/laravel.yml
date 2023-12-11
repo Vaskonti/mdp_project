@@ -31,7 +31,7 @@ jobs:
             ${{ runner.os }}-composer-
       - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-  migrate:
+  Migrate:
     runs-on: ubuntu-latest
     needs: [CacheComposer]
     services:
@@ -97,4 +97,24 @@ jobs:
       run: php artisan test
       env:
         DB_PORT: ${{ job.services.mysql-service.ports[3306]}}
-        DB_HOST:
+  SnykTests:
+    runs-on: ubuntu-latest
+    needs: [ Tests, Migrate]
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysql, mongodb
+      - name: Install Composer dependecies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      # Snyk Static analysis step
+      - name: Snyk Code Analysis
+        working-directory: ${{github.workspace}}/src
+        run: |
+          npm install -g snyk
+          snyk auth ${{ secrets.SNYK_API_TOKEN }}
+          snyk test
