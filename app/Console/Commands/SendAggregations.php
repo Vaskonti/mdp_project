@@ -1,63 +1,71 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Console\Commands;
 
-use App\Mail\AggregationsMail;
 use App\Models\Mongo\Vehicle;
 use App\Notifications\AggregationNotification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
-use Mockery\Exception;
+use function now;
+use Throwable;
+use function dump;
 
-class SendAggregations extends Command
+final class SendAggregations extends Command
 {
+
     /**
      * The name and signature of the console command.
-     *
-     * @var string
      */
-    protected $signature = 'send:aggregations';
+    protected string $signature = 'send:aggregations';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
-    protected $description = 'Command description';
+    protected string $description = 'Command description';
 
     /**
      * Execute the console command.
      *
-     * @return int
      * @throws \Exception
      */
-    public function handle()
+    public function handle(): int
     {
-        Cache::put('sum', 10,now()->addHour());
+        Cache::put('sum', 10, \now()->addHour());
+
         try {
             $yesterday = Carbon::yesterday();
             $tomorrow = Carbon::tomorrow();
-            $sumAggregation = Cache::remember('daily-aggregations:sum',now()->addHour(), function () use ($yesterday,$tomorrow) {
-                $carsExited = Vehicle::whereBetween('exited', [$yesterday, $tomorrow])->get();
-                $sum = 0;
-                foreach ($carsExited as $item) {
-                    $sum += $item->sumPaid;
-                }
-                return $sum;
-            });
+            $sumAggregation = Cache::remember(
+                'daily-aggregations:sum',
+                now()->addHour(),
+                static function () use ($yesterday, $tomorrow) {
+                    $carsExited = Vehicle::whereBetween('exited', [$yesterday, $tomorrow])->get();
+                    $sum = 0;
+    
+                    foreach ($carsExited as $item) {
+                        $sum += $item->sumPaid;
+                    }
+    
+                    return $sum;
+                },
+            );
 
-            $carsRegisteredAggregation = Cache::remember('daily-aggregations:cars-registered', now()->addHour(), function() use ($yesterday,$tomorrow) {
-                return Vehicle::whereBetween('entered', [$yesterday, $tomorrow])->count();
-            });
+            $carsRegisteredAggregation = Cache::remember('daily-aggregations:cars-registered', now()->addHour(), static fn () => Vehicle::whereBetween('entered', [$yesterday, $tomorrow])->count());
             $today = Carbon::today()->format('d-m-Y');
-            Notification::route('mail','hello@admin.com')->notify(new AggregationNotification($sumAggregation, $carsRegisteredAggregation, $today));
+            Notification::route('mail', 'hello@admin.com')->notify(
+                new AggregationNotification($sumAggregation, $carsRegisteredAggregation, $today),
+            );
+
             return 0;
-        } catch (\Exception $e) {
-            dump($e->getMessage());
+        } catch (\Throwable $e) {
+            \dump($e->getMessage());
+
             return 1;
         }
     }
+
 }

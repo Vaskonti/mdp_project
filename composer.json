@@ -24,6 +24,7 @@
         "nunomaduro/collision": "^6.1",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.5.10",
+        "slevomat/coding-standard": "^8.14",
         "spatie/laravel-ignition": "^2.0",
         "squizlabs/php_codesniffer": "^3.8"
     },
@@ -62,7 +63,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     },
     "repositories": [
     ],

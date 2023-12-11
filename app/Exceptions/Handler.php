@@ -1,19 +1,22 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Exceptions;
 
+use App\Exceptions\NoFreeSlotsException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
-class Handler extends ExceptionHandler
+final class Handler extends ExceptionHandler
 {
+
     /**
      * A list of exception types with their corresponding custom log levels.
      *
      * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
      */
-    protected $levels = [
-        //
+    protected array $levels = [
     ];
 
     /**
@@ -21,8 +24,7 @@ class Handler extends ExceptionHandler
      *
      * @var array<int, class-string<\Throwable>>
      */
-    protected $dontReport = [
-        //
+    protected array $dontReport = [
     ];
 
     /**
@@ -30,7 +32,7 @@ class Handler extends ExceptionHandler
      *
      * @var array<int, string>
      */
-    protected $dontFlash = [
+    protected array $dontFlash = [
         'current_password',
         'password',
         'password_confirmation',
@@ -38,17 +40,12 @@ class Handler extends ExceptionHandler
 
     /**
      * Register the exception handling callbacks for the application.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->reportable(static function (\Throwable $e): void {
         });
-        $this->reportable(function (NoFreeSlotsException $e) {
-           return false;
-        });
+        $this->reportable(static fn (\App\Exceptions\NoFreeSlotsException $e) => false);
     }
 
 }

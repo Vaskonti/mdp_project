@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Listeners;
 
 use App\Events\CarExitEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
-class CarExitListener
+final class CarExitListener
 {
+
     /**
      * Create the event listener.
      *
@@ -17,17 +18,14 @@ class CarExitListener
      */
     public function __construct()
     {
-        //
     }
 
     /**
      * Handle the event.
-     *
-     * @param  \App\Events\CarExitEvent  $event
-     * @return void
      */
-    public function handle(CarExitEvent $event)
+    public function handle(CarExitEvent $event): void
     {
         Log::alert(Carbon::now()->format("d-m-Y H:i:ss")."   ".$event->car->registrationPlate. " exited now");
     }
+
 }

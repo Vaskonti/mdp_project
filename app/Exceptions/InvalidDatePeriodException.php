@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Exceptions;
 
 use Exception;
-use JetBrains\PhpStorm\Internal\LanguageLevelTypeAware;
 use Throwable;
 
-class InvalidDatePeriodException extends Exception
+final class InvalidDatePeriodException extends Exception
 {
+
     public function __construct(string $message = "Invalid date period!", int $code = 0, ?Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
+
 }

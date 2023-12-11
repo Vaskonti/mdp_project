@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Models\Mongo;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Eloquent\Model;
 
-class Vehicle extends Model
+final class Vehicle extends Model
 {
+
     use HasFactory;
 
     protected string $registrationPlate;
@@ -21,6 +24,7 @@ class Vehicle extends Model
         'entered',
         'exited',
     ];
+
     //@review not something major, but in general the db columns and in that number mongo fields should be lowercase_separated_by_underscores
     protected $fillable = [
         'registrationPlate',
@@ -33,7 +37,7 @@ class Vehicle extends Model
         'sumPaid',
     ];
 
-    public function newFromBuilder($attributes = [], $connection = null): Bus|Truck|Car|Vehicle
+    public function newFromBuilder($attributes = [], $connection = null): Bus|Truck|Car|self
     {
         $model = match ($attributes['category']) {
             'A' => new Car($attributes),
@@ -43,18 +47,21 @@ class Vehicle extends Model
         };
         $model->exists = true;
         $model->setRawAttributes((array)$attributes, true);
+
         return $model;
-    }
-    protected function getPrices(): array
-    {
-        return [
-            'day' => 0,
-            'night' => 0
-        ];
     }
 
     public static function vehicleInsideParking(string $registrationPlate)
     {
-        return Vehicle::where('registrationPlate','=',$registrationPlate)->whereNull('exited')->exists();
+        return self::where('registrationPlate','=',$registrationPlate)->whereNull('exited')->exists();
     }
+
+    protected function getPrices(): array
+    {
+        return [
+            'day' => 0,
+            'night' => 0,
+        ];
+    }
+
 }

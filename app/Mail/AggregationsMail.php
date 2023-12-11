@@ -1,30 +1,31 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class AggregationsMail extends Mailable
+final class AggregationsMail extends Mailable
 {
-    use Queueable, SerializesModels;
+
+    use Queueable;
+    use SerializesModels;
+
     const TEMPLATE = "email_aggregations";
 
     private int $sumGenerated;
-    private int $carsRegistered;
-    private $date;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(int $sumPaid, int $carsRegistered, $date)
+    public function __construct(int $sumPaid, private int $carsRegistered, private $date)
     {
         $this->sumGenerated = $sumPaid;
-        $this->carsRegistered = $carsRegistered;
-        $this->date = $date;
     }
 
     /**
@@ -40,4 +41,5 @@ class AggregationsMail extends Mailable
                     ->with($this->sumGenerated)
                     ->with($this->carsRegistered);
     }
+
 }

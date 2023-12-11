@@ -1,34 +1,31 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Providers;
 
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+final class AppServiceProvider extends ServiceProvider
 {
+
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->app->singleton(Client::class, function ($app) {
-            return ClientBuilder::create()
+        $this->app->singleton(Client::class, static fn ($app) => ClientBuilder::create()
                 ->setHosts($app['config']->get('services.search.hosts'))
-                ->build();
-        });
+                ->build());
     }
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        //
     }
+
 }

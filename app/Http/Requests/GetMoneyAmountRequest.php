@@ -1,17 +1,18 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetMoneyAmountRequest extends FormRequest
+final class GetMoneyAmountRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,11 +22,12 @@ class GetMoneyAmountRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
+            'dateEnd' => 'date',
             'dateStart' => 'required|date',
-            'dateEnd' => 'date'
         ];
     }
+
 }

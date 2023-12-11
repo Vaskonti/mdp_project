@@ -1,31 +1,32 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class DiscountCardsSeed extends Seeder
+final class DiscountCardsSeed extends Seeder
 {
+
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         DB::connection('mysql')->table('discount_cards')->insert([
+           'discount' => 0.10,
            'type' => 'Silver',
-           'discount' => 0.10
         ]);
         DB::connection('mysql')->table('discount_cards')->insert([
+            'discount' => 0.15,
             'type' => 'Gold',
-            'discount' => 0.15
         ]);
         DB::connection('mysql')->table('discount_cards')->insert([
+            'discount' => 0.20,
             'type' => 'Platinum',
-            'discount' => 0.20
         ]);
     }
+
 }

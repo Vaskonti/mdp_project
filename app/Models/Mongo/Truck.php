@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Models\Mongo;
 
-class Truck extends Vehicle
+final class Truck extends Vehicle
 {
+
     const NEEDED_SLOTS = 4;
     const CATEGORY = "C";
     const PRICE_DAY = 12;
@@ -16,6 +19,7 @@ class Truck extends Vehicle
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
+
         $this->registrationPlate = $attributes['registrationPlate'];
         $this->brand = $attributes['brand'];
         $this->model = $attributes['model'];
@@ -35,4 +39,5 @@ class Truck extends Vehicle
           'night' => self::PRICE_NIGHT,
         ];
     }
+
 }

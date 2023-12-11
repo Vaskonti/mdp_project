@@ -1,4 +1,8 @@
-<?php return array (
+<?php
+
+declare(strict_types = 1);
+
+return array (
   'laravel/sail' => 
   array (
     'providers' => 
@@ -58,13 +62,13 @@
   ),
   'spatie/laravel-ignition' => 
   array (
-    'providers' => 
-    array (
-      0 => 'Spatie\\LaravelIgnition\\IgnitionServiceProvider',
-    ),
     'aliases' => 
     array (
       'Flare' => 'Spatie\\LaravelIgnition\\Facades\\Flare',
+    ),
+    'providers' => 
+    array (
+      0 => 'Spatie\\LaravelIgnition\\IgnitionServiceProvider',
     ),
   ),
 );

@@ -1,23 +1,26 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Events;
 
 use App\Models\Mongo\Vehicle;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
 
-class CarExitEvent
+final class CarExitEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public $car;
+
     /**
      * Create a new event instance.
      *
@@ -32,11 +35,10 @@ class CarExitEvent
 
     /**
      * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
      */
-    public function broadcastOn()
+    public function broadcastOn(): Channel|array
     {
         return new PrivateChannel('channel-name');
     }
+
 }
