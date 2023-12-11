@@ -23,8 +23,7 @@ jobs:
       - name: PHP Stan
         uses: php-actions/phpstan@v3
         with:
-          path: .
-          level: 1
+          configuration: phpstan.neon
   CacheComposer:
     runs-on: ubuntu-latest
     steps:
