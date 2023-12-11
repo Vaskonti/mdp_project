@@ -65,9 +65,8 @@ jobs:
         run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: PHP CS Fixer
-        uses: StephaneBour/actions-php-cs-fixer@1.0
-        with:
-          dir: './app'
+        run: |
+          ./vendor/bin/php-cs-fixer fix --dry-run --diff ./app
   Migrate:
     runs-on: ubuntu-latest
     needs: [PhpCSFixer, PhpStan]
