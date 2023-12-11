@@ -78,3 +78,23 @@ jobs:
         env:
           DB_PORT: ${{ job.services.mysql-service.ports[3306]}}
           DB_HOST: 127.0.0.1
+    tests:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysql, mongodb
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Configure Laravel
+        run: |
+              cp .env.ci .env
+              php artisan key:generate
+              php artisan config:clear
+      - name: Run tests
+        run: php artisan test
+        env:
+          DB_PORT: ${{ job.services.mysql-service.ports[3306]}}
+          DB_HOST:
