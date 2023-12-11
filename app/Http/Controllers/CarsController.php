@@ -19,12 +19,10 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use function response;
 use Throwable;
-use function number_format;
-use function now;
 
-final class CarsController extends Controller
+
+class CarsController extends Controller
 {
 
     public function enterParking(CarPostRequest $request)

@@ -1,6 +1,5 @@
 <?php
 
-declare(strict_types = 1);
 
 namespace App\Http;
 
@@ -38,7 +37,7 @@ final class Kernel extends HttpKernel
      *
      * @var array<int, class-string|string>
      */
-    protected array $middleware = [
+    protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
         TrustProxies::class,
         HandleCors::class,
@@ -53,7 +52,7 @@ final class Kernel extends HttpKernel
      *
      * @var array<string, array<int, class-string|string>>
      */
-    protected array $middlewareGroups = [
+    protected $middlewareGroups = [
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
@@ -77,7 +76,7 @@ final class Kernel extends HttpKernel
      *
      * @var array<string, class-string|string>
      */
-    protected array $routeMiddleware = [
+    protected $routeMiddleware = [
         'auth' => Authenticate::class,
         'auth.basic' => AuthenticateWithBasicAuth::class,
         'auth.session' => AuthenticateSession::class,

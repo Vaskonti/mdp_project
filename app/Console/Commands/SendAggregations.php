@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace App\Console\Commands;
 
 use App\Models\Mongo\Vehicle;
@@ -9,10 +7,8 @@ use App\Notifications\AggregationNotification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
-use function now;
-use Throwable;
-use function dump;
 
 final class SendAggregations extends Command
 {
@@ -20,12 +16,12 @@ final class SendAggregations extends Command
     /**
      * The name and signature of the console command.
      */
-    protected string $signature = 'send:aggregations';
+    protected $signature = 'send:aggregations';
 
     /**
      * The console command description.
      */
-    protected string $description = 'Command description';
+    protected $description = 'Command description';
 
     /**
      * Execute the console command.
@@ -62,7 +58,7 @@ final class SendAggregations extends Command
 
             return 0;
         } catch (\Throwable $e) {
-            \dump($e->getMessage());
+            Log::error($e->getMessage());
 
             return 1;
         }

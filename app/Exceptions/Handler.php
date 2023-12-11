@@ -1,12 +1,9 @@
 <?php
 
-declare(strict_types = 1);
 
 namespace App\Exceptions;
 
-use App\Exceptions\NoFreeSlotsException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
 
 final class Handler extends ExceptionHandler
 {
@@ -16,7 +13,7 @@ final class Handler extends ExceptionHandler
      *
      * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
      */
-    protected array $levels = [
+    protected  $levels = [
     ];
 
     /**
@@ -24,7 +21,7 @@ final class Handler extends ExceptionHandler
      *
      * @var array<int, class-string<\Throwable>>
      */
-    protected array $dontReport = [
+    protected  $dontReport = [
     ];
 
     /**
@@ -32,7 +29,7 @@ final class Handler extends ExceptionHandler
      *
      * @var array<int, string>
      */
-    protected array $dontFlash = [
+    protected  $dontFlash = [
         'current_password',
         'password',
         'password_confirmation',
@@ -45,7 +42,7 @@ final class Handler extends ExceptionHandler
     {
         $this->reportable(static function (\Throwable $e): void {
         });
-        $this->reportable(static fn (\App\Exceptions\NoFreeSlotsException $e) => false);
+        $this->reportable(static fn (NoFreeSlotsException $e) => false);
     }
 
 }

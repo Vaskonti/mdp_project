@@ -7,7 +7,7 @@ namespace App\Models\Mongo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Eloquent\Model;
 
-final class Vehicle extends Model
+class Vehicle extends Model
 {
 
     use HasFactory;
