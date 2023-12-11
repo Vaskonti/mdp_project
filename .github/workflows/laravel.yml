@@ -117,3 +117,14 @@ jobs:
           npm install -g snyk
           snyk auth ${{ secrets.SNYK_API_TOKEN }}
           snyk test
+  SonarCloud:
+    runs-on: ubuntu-latest
+    needs: [Tests, Migrate]
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Analyze with SonarCloud
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
