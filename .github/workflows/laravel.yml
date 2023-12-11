@@ -113,7 +113,6 @@ jobs:
 
       # Snyk Static analysis step
       - name: Snyk Code Analysis
-        working-directory: ${{github.workspace}}/src
         run: |
           npm install -g snyk
           snyk auth ${{ secrets.SNYK_API_TOKEN }}
