@@ -81,6 +81,15 @@ jobs:
         ports:
           - 3306/tcp
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      mongodb-service:
+        image: mongodb:4.4.9
+        env:
+          MONGODB_PORT: 27017
+          MONGODB_USERNAME: root
+          MONGODB_PASSWORD: password
+          MONGODB_DB: parking
+        ports:
+          - 27017/tcp
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
