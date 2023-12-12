@@ -36,7 +36,7 @@ services:
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
             - 'sail-mysql:/var/lib/mysql'
-            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+            - './docker/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
             - sail
         healthcheck:
@@ -53,6 +53,8 @@ services:
         restart: always
         ports:
             - '8000:80'
+        networks:
+            - sail
         volumes:
             - './:/var/www'
             - './docker-compose/nginx:/etc/nginx/conf.d'

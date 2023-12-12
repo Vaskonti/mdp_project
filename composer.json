@@ -14,7 +14,9 @@
         "laravel/tinker": "^2.7",
         "mongodb/laravel-mongodb": "^4.0",
         "mongodb/mongodb": "^1.12",
-        "predis/predis": "^2.2"
+        "predis/predis": "^2.2",
+        "ext-mongo": "*",
+        "ext-redis": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

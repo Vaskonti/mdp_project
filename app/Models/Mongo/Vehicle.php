@@ -36,7 +36,7 @@ class Vehicle extends Model
         'sumPaid',
     ];
 
-    public function newFromBuilder($attributes = [], $connection = null): Bus|Truck|Car|self
+    public function newFromBuilder($attributes = [], $connection = null): self
     {
         $model = match ($attributes['category']) {
             'A' => new Car($attributes),
