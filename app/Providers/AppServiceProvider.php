@@ -6,6 +6,8 @@ namespace App\Providers;
 
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
+use Illuminate\Container\Container;
+use Illuminate\Contracts\Container\Container as ContainerContract;
 use Illuminate\Support\ServiceProvider;
 
 final class AppServiceProvider extends ServiceProvider
@@ -16,8 +18,9 @@ final class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(Client::class, static fn ($app) => ClientBuilder::create()
-                ->setHosts($app['config']->get('services.search.hosts'))
-                ->build());
+            ->setHosts($app['config']->get('services.search.hosts'))
+            ->build());
+        $this->app->bind(ContainerContract::class, Container::class);
     }
 
     /**
