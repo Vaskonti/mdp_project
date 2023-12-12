@@ -55,6 +55,18 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
+    "autoload": {
+        "exclude-from-classmap": [
+            "database/migrations",
+            "database/seeds",
+            "database/factories"
+        ],
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
     "repositories": [
     ],
     "minimum-stability": "stable"
