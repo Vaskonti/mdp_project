@@ -71,7 +71,7 @@ jobs:
           configuration: phpstan.neon
   PhpCSFixer:
     runs-on: ubuntu-latest
-    needs: [CacheComposer,CliMarkdown]
+    needs: [CacheComposer,GitLeaks]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
