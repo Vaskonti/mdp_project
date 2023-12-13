@@ -44,7 +44,7 @@ A **Parking** app for demonstration purposes.
 - Check the current sum of a vehicle in the parking lot: **(GET)**
     > <http://localhost/api/check/{registrationPlate}>
 - Check the number of unique cars entered the parking lot for a period: **(GET)**
-    > <http://localhost/api/check/cars/unique`
+    > <http://localhost/api/check/cars/unique>
   - dateStart **(String)**
   - (_optional_) dateEnd **(String)**
 - Check the amount of money earned in a period: **(GET)**
