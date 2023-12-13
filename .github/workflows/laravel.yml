@@ -6,6 +6,7 @@ on:
   pull_request:
     branches: [ '**' ]
 
+
 jobs:
   CacheComposer:
       runs-on: ubuntu-latest
@@ -99,6 +100,19 @@ jobs:
         ports:
           - 3306/tcp
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      mongodb-service:
+        image: mongo
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: password
+          MONGO_INITDB_DATABASE: parking
+          options: >-
+            --health-cmd mongo
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
+        ports:
+          - 27017:27017
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -115,15 +129,6 @@ jobs:
            cp .env.ci .env
            php artisan key:generate
            php artisan config:clear
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.10.0
-        with:
-            mongodb-version: '4.4.9'
-            mongodb-port: 27017
-            mongodb-username: root
-            mongodb-password: password
-            mongodb-db: parking
-
       - name: Run migrations
         run: php artisan migrate
         env:
