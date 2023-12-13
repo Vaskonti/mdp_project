@@ -108,15 +108,6 @@ jobs:
            cp .env.ci .env
            php artisan key:generate
            php artisan config:clear
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.10.0
-        with:
-            mongodb-version: '4.4.9'
-            mongodb-port: 27017
-            mongodb-username: root
-            mongodb-password: password
-            mongodb-db: parking
-
       - name: Run migrations
         run: php artisan migrate
         env:
