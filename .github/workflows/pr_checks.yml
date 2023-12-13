@@ -1,8 +1,8 @@
 name: PR checks
 
 on:
-  push:
-    branches: [ 'pr-workflow' ]
+  pull_request:
+    branches: [ 'main' ]
 
 jobs:
   GitLeaks:
