@@ -88,7 +88,7 @@ jobs:
           ./vendor/bin/php-cs-fixer fix --dry-run --diff ./app
   Migrate:
     runs-on: ubuntu-latest
-    needs: [PhpCSFixer, PhpStan, CliMarkdown]
+    needs: [PhpCSFixer, PhpStan]
     services:
       mysql-service:
         image: mysql:8
@@ -136,7 +136,7 @@ jobs:
           DB_HOST: 127.0.0.1
   Tests:
     runs-on: ubuntu-latest
-    needs: [PhpCSFixer, PhpStan, CliMarkdown]
+    needs: [PhpCSFixer, PhpStan]
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
