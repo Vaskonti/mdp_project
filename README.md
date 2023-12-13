@@ -30,27 +30,27 @@ A **Parking** app for demonstration purposes.
 
 - Register a car in the parking lot: **(POST)**
     > <http://localhost/api/register>
-    - registrationPlate
-    - brand
-    - model
-    - color
-    - category **(A,B or C)**
-    - card (Silver, Gold or Platinum)
+  - registrationPlate
+  - brand
+  - model
+  - color
+  - category **(A,B or C)**
+  - card (Silver, Gold or Platinum)
 - Unregister a car in the parking lot: **(POST)**
     > <http://localhost/api/exit>
-    - registrationPlate
+  - registrationPlate
 - See available parking slots: **(GET)**
     > <http://localhost/api/available>
 - Check the current sum of a vehicle in the parking lot: **(GET)**
     > <http://localhost/api/check/{registrationPlate}>
 - Check the number of unique cars entered the parking lot for a period: **(GET)**
     > <http://localhost/api/check/cars/unique`
-    - dateStart **(String)**
-    - (_optional_) dateEnd **(String)**
+  - dateStart **(String)**
+  - (_optional_) dateEnd **(String)**
 - Check the amount of money earned in a period: **(GET)**
     > <http://localhost/api/check/cars/sum>
-    - dateStart **(String)**
-    - (_optional_) dateEnd **(String)**
+  - dateStart **(String)**
+  - (_optional_) dateEnd **(String)**
 
 ## Jobs and Workers
 
