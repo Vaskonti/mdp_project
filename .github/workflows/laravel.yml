@@ -80,7 +80,7 @@ jobs:
       - name: Composer Install
         run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Install Cli-markdown
-        run: npm install -g markdownlint-cli
+        run: npm install -g markdownlint-cli --ignore vendor
       - name: Run cli-markdown
         run: markdownlint '**/*.md'
   Migrate:
