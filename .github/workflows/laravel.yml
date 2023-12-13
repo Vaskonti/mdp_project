@@ -80,9 +80,9 @@ jobs:
       - name: Composer Install
         run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Install Cli-markdown
-        run: npm install -g markdownlint-cli --ignore vendor
+        run: npm install -g markdownlint-cli
       - name: Run cli-markdown
-        run: markdownlint '**/*.md'
+        run: markdownlint '**/*.md' --ignore vendor
   Migrate:
     runs-on: ubuntu-latest
     needs: [PhpCSFixer, PhpStan]
