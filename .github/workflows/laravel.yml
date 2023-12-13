@@ -47,9 +47,25 @@ jobs:
         run: npm install -g markdownlint-cli
       - name: Run cli-markdown
         run: markdownlint '**/*.md' --ignore vendor     
+  GitLeaks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysql, mongodb
+      - name: Composer Install
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   PhpStan:
     runs-on: ubuntu-latest
-    needs: [CacheComposer,CliMarkdown]
+    needs: [CacheComposer,CliMarkdown,GitLeaks]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -67,7 +83,7 @@ jobs:
           configuration: phpstan.neon
   PhpCSFixer:
     runs-on: ubuntu-latest
-    needs: [CacheComposer,CliMarkdown]
+    needs: [CacheComposer,CliMarkdown,GitLeaks]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
