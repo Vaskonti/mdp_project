@@ -17,7 +17,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: mysql, mongodb  
+          extensions: mysql, mongodb
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
@@ -81,7 +81,7 @@ jobs:
           php-version: '8.2'
           extensions: mysql, mongodb
       - name: Composer Install
-        run: composer install --no-ansi --no-interaction 
+        run: composer install --no-ansi --no-interaction
              --no-scripts --no-progress --prefer-dist
       - name: PHP Stan
         uses: php-actions/phpstan@v3
@@ -166,7 +166,7 @@ jobs:
           php-version: '8.2'
           extensions: mysql, mongodb
       - name: Install Composer dependencies
-        run: composer install --no-ansi --no-interaction 
+        run: composer install --no-ansi --no-interaction
              --no-scripts --no-progress --prefer-dist
       - name: Configure Laravel
         run: |
@@ -189,7 +189,7 @@ jobs:
           php-version: '8.2'
           extensions: mysql, mongodb
       - name: Install Composer dependecies
-        run: composer install --no-ansi --no-interaction 
+        run: composer install --no-ansi --no-interaction
              --no-scripts --no-progress --prefer-dist
       # Snyk Static analysis step
       - name: Snyk Code Analysis
