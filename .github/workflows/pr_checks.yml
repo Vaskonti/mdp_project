@@ -25,7 +25,8 @@ jobs:
           php-version: '8.2'
           extensions: mysql, mongodb
       - name: Composer Install
-        run:  composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run:  composer install --no-ansi --no-interaction
+          --no-scripts --no-progress --prefer-dist
 
       - name: PHP Stan
         uses: php-actions/phpstan@v3
@@ -42,7 +43,8 @@ jobs:
           php-version: '8.2'
           extensions: mysql, mongodb
       - name: Composer Install
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install --no-ansi --no-interaction
+          --no-scripts --no-progress --prefer-dist
 
       - name: PHP CS Fixer
         run: |
@@ -54,7 +56,8 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Install Composer dependecies
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install --no-ansi --no-interaction
+          --no-scripts --no-progress --prefer-dist
 
       # Snyk Static analysis step
       - name: Snyk Code Analysis
