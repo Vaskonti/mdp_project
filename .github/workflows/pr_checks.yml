@@ -1,0 +1,80 @@
+name: PR checks
+
+on:
+  pull_request:
+    branches: [ 'main' ]
+
+jobs:
+  GitLeaks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  PhpStan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysql, mongodb
+      - name: Composer Install
+        run:  composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: PHP Stan
+        uses: php-actions/phpstan@v3
+        with:
+          configuration: phpstan.neon
+  PhpCSFixer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysql, mongodb
+      - name: Composer Install
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: PHP CS Fixer
+        run: |
+          ./vendor/bin/php-cs-fixer fix --dry-run --diff ./app
+  SnykTests:
+    needs: [GitLeaks, PhpStan, PhpCSFixer]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysql, mongodb
+      - name: Install Composer dependecies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      # Snyk Static analysis step
+      - name: Snyk Code Analysis
+        run: |
+          npm install -g snyk
+          snyk auth ${{ secrets.SNYK_API_TOKEN }}
+          snyk test
+  SonarCloud:
+    needs: [GitLeaks, PhpStan, PhpCSFixer]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Analyze with SonarCloud
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
