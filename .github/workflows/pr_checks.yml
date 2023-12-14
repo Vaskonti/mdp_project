@@ -55,10 +55,6 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
-      - name: Install Composer dependecies
-        run: composer install --no-ansi --no-interaction
-          --no-scripts --no-progress --prefer-dist
-
       # Snyk Static analysis step
       - name: Snyk Code Analysis
         run: |
