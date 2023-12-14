@@ -2,46 +2,64 @@ name: Laravel
 
 on:
   push:
-    branches: [ 'main', '*/*' ]
+    branches: ['main', '*/*']
   pull_request:
-    branches: [ '**' ]
+    branches: ['**']
 
 
 jobs:
   CacheComposer:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
-  
-        - name: Set up PHP
-          uses: shivammathur/setup-php@v2
-          with:
-            php-version: '8.2'
-            extensions: mysql, mongodb
-  
-        - name: Get Composer Cache Directory
-          id: composer-cache
-          run: |
-            echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-        - uses: actions/cache@v3
-          with:
-            path: ${{ github.workspace }}/vendor
-            key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-            restore-keys: |
-              ${{ runner.os }}-composer-
-        - name: Install Composer dependencies
-          run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysql, mongodb
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction
+             --no-scripts --no-progress --prefer-dist
+  ValidateYaml:
+    runs-on: ubuntu-latest
+    needs: [CacheComposer, GitLeaks]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Validate YAML files
+        run: yamllint .
   CliMarkdown:
     runs-on: ubuntu-latest
-    needs: [CacheComposer,GitLeaks]
+    needs: [CacheComposer, GitLeaks]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Install Cli-markdown
         run: npm install -g markdownlint-cli
       - name: Run cli-markdown
-        run: markdownlint '**/*.md' --ignore vendor     
+        run: markdownlint '**/*.md' --ignore vendor
+  EditorConfig:
+    name: Check .editorconfig file
+    runs-on: ubuntu-latest
+    needs: [CacheComposer, GitLeaks]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Install editorconfig-checker
+        run: npm install editorconfig-checker -g
+      - name: run editorconfig-checker to code
+        run: editorconfig-checker --exclude vendor --exclude .idea
   GitLeaks:
     runs-on: ubuntu-latest
     steps:
@@ -53,7 +71,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   PhpStan:
     runs-on: ubuntu-latest
-    needs: [CacheComposer,GitLeaks]
+    needs: [CacheComposer, GitLeaks]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -63,15 +81,15 @@ jobs:
           php-version: '8.2'
           extensions: mysql, mongodb
       - name: Composer Install
-        run:  composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-
+        run: composer install --no-ansi --no-interaction
+             --no-scripts --no-progress --prefer-dist
       - name: PHP Stan
         uses: php-actions/phpstan@v3
         with:
           configuration: phpstan.neon
   PhpCSFixer:
     runs-on: ubuntu-latest
-    needs: [CacheComposer,GitLeaks]
+    needs: [CacheComposer, GitLeaks]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -81,14 +99,14 @@ jobs:
           php-version: '8.2'
           extensions: mysql, mongodb
       - name: Composer Install
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-
+        run: composer install --no-ansi --no-interaction
+             --no-scripts --no-progress --prefer-dist
       - name: PHP CS Fixer
         run: |
           ./vendor/bin/php-cs-fixer fix --dry-run --diff ./app
   Migrate:
     runs-on: ubuntu-latest
-    needs: [PhpCSFixer, PhpStan]
+    needs: [PhpCSFixer, PhpStan, ValidateYaml]
     services:
       mysql-service:
         image: mysql:8
@@ -99,7 +117,8 @@ jobs:
           MYSQL_PASSWORD: password
         ports:
           - 3306/tcp
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --health-cmd="mysqladmin ping" --health-interval=10s
+                 --health-timeout=5s --health-retries=3
       mongodb-service:
         image: mongo
         env:
@@ -123,7 +142,8 @@ jobs:
           php-version: '8.2'
           extensions: mysql, mongodb
       - name: Install Composer dependencies
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install --no-ansi --no-interaction
+             --no-scripts --no-progress --prefer-dist
       - name: Configure Laravel
         run: |
            cp .env.ci .env
@@ -136,29 +156,30 @@ jobs:
           DB_HOST: 127.0.0.1
   Tests:
     runs-on: ubuntu-latest
-    needs: [PhpCSFixer, PhpStan]
+    needs: [PhpCSFixer, PhpStan, ValidateYaml]
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
-    - name: Set up PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.2'
-        extensions: mysql, mongodb
-    - name: Install Composer dependencies
-      run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Configure Laravel
-      run: |
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysql, mongodb
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction
+             --no-scripts --no-progress --prefer-dist
+      - name: Configure Laravel
+        run: |
             cp .env.ci .env
             php artisan key:generate
             php artisan config:clear
-    - name: Run tests
-      run: php artisan test
-      env:
-        DB_PORT: ${{ job.services.mysql-service.ports[3306]}}
+      - name: Run tests
+        run: php artisan test
+        env:
+          DB_PORT: ${{ job.services.mysql-service.ports[3306]}}
   SnykTests:
     runs-on: ubuntu-latest
-    needs: [ Tests, Migrate]
+    needs: [Tests, Migrate]
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -168,8 +189,8 @@ jobs:
           php-version: '8.2'
           extensions: mysql, mongodb
       - name: Install Composer dependecies
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-
+        run: composer install --no-ansi --no-interaction
+             --no-scripts --no-progress --prefer-dist
       # Snyk Static analysis step
       - name: Snyk Code Analysis
         run: |
