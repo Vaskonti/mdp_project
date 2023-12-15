@@ -221,7 +221,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Buiild Docker Image
-        working-directory: ${{ github.workspace }}/docker/8.2
+        working-directory: ${{ github.workspace }}/laravel-image
         run: |
           docker build --file Dockerfile --tag ${{secrets.ECR_REGISTRY}}/mdp_laravel:${{ github.sha }} .
           docker tag ${{secrets.ECR_REGISTRY}}/mdp_laravel:${{ github.sha }} ${{secrets.ECR_REGISTRY}}/mdp_laravel:latest
