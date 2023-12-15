@@ -250,3 +250,16 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results.sarif'
+
+  ManualApproval:
+    needs: [DockerBuild]
+    runs-on: ubuntu-latest
+    steps:
+        - uses: trstringer/manual-approval@v1
+          with:
+              secret: ${{ github.TOKEN }}
+              approvers: VasilHristovDev, themask025, kaisiq
+              minimum-approvals: 1
+              issue-title: "Deploying v1.3.5 to prod from staging"
+              issue-body: "Please approve or deny the deployment of version v1.3.5."
+              exclude-workflow-initiator-as-approver: false
