@@ -229,7 +229,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          image-ref: '${{ REGISTRY }}/${{ REPOSITORY }}:${{ IMAGE_TAG }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
         env:
