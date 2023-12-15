@@ -238,9 +238,8 @@ jobs:
         env:
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
           ECR_REPOSITORY: mdp-laravel-images
-          IMAGE_TAG: mdp_laravel:${{ github.sha }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          echo $ECR_REPOSITORY:$IMAGE_TAG
-          docker push ${{ secrets.ECR_REGISTRY }}/$IMAGE_TAG
+          docker push ${{ secrets.ECR_REGISTRY }}/$ECR_REPOSITORY:$IMAGE_TAG
 
 
