@@ -223,7 +223,6 @@ jobs:
         working-directory: ${{ github.workspace }}/laravel-image
         run: |
           docker build --file Dockerfile --tag ${{secrets.ECR_REGISTRY}}/mdp_laravel:${{ github.sha }} .
-          docker tag ${{secrets.ECR_REGISTRY}}/mdp_laravel:${{ github.sha }} mdp_laravel
 
 #      - name: Run Trivy vulnerability scanner
 #        uses: aquasecurity/trivy-action@master
