@@ -241,5 +241,3 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker push ${{ secrets.ECR_REGISTRY }}/$ECR_REPOSITORY:$IMAGE_TAG
-
-
