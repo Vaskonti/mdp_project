@@ -62,15 +62,15 @@ jobs:
         run: editorconfig-checker --exclude vendor --exclude .idea
   GitLeaks:
     runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'pull_request' ||
-      (github.event_name == 'push' && github.ref == 'refs/heads/master')
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Run Gitleaks
 
         uses: gitleaks/gitleaks-action@v2
+        if: |
+          github.event_name == 'pull_request' ||
+          (github.event_name == 'push' && github.ref == 'refs/heads/master')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   PhpStan:
