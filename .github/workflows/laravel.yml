@@ -219,11 +219,11 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Buiild Docker Image
+      - name: Build Docker Image
         working-directory: ${{ github.workspace }}/laravel-image
         run: |
           docker build --file Dockerfile --tag ${{secrets.ECR_REGISTRY}}/mdp_laravel:${{ github.sha }} .
-          docker tag ${{secrets.ECR_REGISTRY}}/mdp_laravel:${{ github.sha }} ${{secrets.ECR_REGISTRY}}/mdp_laravel:latest
+          docker tag ${{secrets.ECR_REGISTRY}}/mdp_laravel:${{ github.sha }} mdp_laravel
 
 #      - name: Run Trivy vulnerability scanner
 #        uses: aquasecurity/trivy-action@master
@@ -242,6 +242,6 @@ jobs:
           IMAGE_TAG: mdp_laravel:${{ github.sha }}
         run: |
           echo $ECR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push mdp_laravel
 
 
