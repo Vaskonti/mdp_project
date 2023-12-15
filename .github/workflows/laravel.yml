@@ -69,8 +69,8 @@ jobs:
 
         uses: gitleaks/gitleaks-action@v2
         if: |
-          github.event_name == 'pull_request' ||
-          (github.event_name == 'push' && github.ref == 'refs/heads/master')
+          github.event_name != 'pull_request' ||
+          (github.event_name == 'push' && github.ref == 'refs/heads/main')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   PhpStan:
