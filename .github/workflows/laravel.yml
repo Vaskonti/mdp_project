@@ -201,7 +201,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
   DockerBuild:
-    needs: [SnykTests, SonarCloud]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -243,6 +242,6 @@ jobs:
           IMAGE_TAG: mdp_laravel:${{ github.sha }}
         run: |
           echo $ECR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
 
