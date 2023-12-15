@@ -221,11 +221,12 @@ jobs:
       - name: Build Docker Image
         working-directory: ${{ github.workspace }}/laravel-image
         env:
-          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
-          ECR_REPOSITORY: mdp-laravel-images
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: mdp-laravel-images
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/mdp-laravel-images:${{ github.sha }} .
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
 #      - name: Run Trivy vulnerability scanner
 #        uses: aquasecurity/trivy-action@master
@@ -237,10 +238,10 @@ jobs:
 #          vuln-type: 'os,library'
 #          severity: 'CRITICAL,HIGH'
 
-      - name: Build, tag, and push image to Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
-          ECR_REPOSITORY: mdp-laravel-images
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+#      - name: Build, tag, and push image to Amazon ECR
+#        env:
+#          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+#          ECR_REPOSITORY: mdp-laravel-images
+#          IMAGE_TAG: ${{ github.sha }}
+#        run: |
+#          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
