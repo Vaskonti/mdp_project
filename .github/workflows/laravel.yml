@@ -237,11 +237,11 @@ jobs:
 
       - name: Build, tag, and push image to Amazon ECR
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
           ECR_REPOSITORY: mdp-laravel-images
           IMAGE_TAG: mdp_laravel:${{ github.sha }}
         run: |
           echo $ECR_REPOSITORY:$IMAGE_TAG
-          docker push mdp_laravel
+          docker push ${{ secrets.ECR_REGISTRY }}/$IMAGE_TAG
 
 
