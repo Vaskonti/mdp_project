@@ -226,14 +226,6 @@ jobs:
           docker build --file Dockerfile --tag ${{secrets.ECR_REGISTRY}}/mdp_laravel:${{ github.sha }} .
           docker tag ${{secrets.ECR_REGISTRY}}/mdp_laravel:${{ github.sha }} ${{secrets.ECR_REGISTRY}}/mdp_laravel:latest
 
-      - name: Build, tag, and push image to Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: mdp-laravel-images
-          IMAGE_TAG: mdp_laravel:${{ github.sha }}
-        run:
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
@@ -243,3 +235,14 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: mdp-laravel-images
+          IMAGE_TAG: mdp_laravel:${{ github.sha }}
+        run: |
+          cat $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+
