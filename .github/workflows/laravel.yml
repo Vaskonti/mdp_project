@@ -201,6 +201,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
   DockerBuild:
+    needs: [SonarCloud, SnykTests]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
