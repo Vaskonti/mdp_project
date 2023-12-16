@@ -2,7 +2,7 @@ name: PR checks
 
 on:
   pull_request:
-    branches: [ 'main' ]
+    branches: ['main', "**"]
 
 jobs:
   GitLeaks:
@@ -25,7 +25,7 @@ jobs:
           php-version: '8.2'
           extensions: mysql, mongodb
       - name: Composer Install
-        run:  composer install --no-ansi --no-interaction
+        run: composer install --no-ansi --no-interaction
           --no-scripts --no-progress --prefer-dist
 
       - name: PHP Stan
