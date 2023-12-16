@@ -21,6 +21,8 @@ RUN apk update && apk add -i \
     sqlite \
     nano \
     zlib \
+    zlib-dev \
+    build-base jpeg-dev zlib-dev \
     kcron
     # cron
 
