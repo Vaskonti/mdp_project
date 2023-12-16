@@ -75,7 +75,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   PhpStan:
     runs-on: ubuntu-latest
-    needs: [ CacheComposer, GitLeaks ]
+    needs: [CacheComposer, GitLeaks]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -93,7 +93,7 @@ jobs:
           configuration: phpstan.neon
   PhpCSFixer:
     runs-on: ubuntu-latest
-    needs: [ CacheComposer, GitLeaks ]
+    needs: [CacheComposer, GitLeaks]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -110,7 +110,7 @@ jobs:
           ./vendor/bin/php-cs-fixer fix --dry-run --diff ./app
   Migrate:
     runs-on: ubuntu-latest
-    needs: [ PhpCSFixer, PhpStan ]
+    needs: [PhpCSFixer, PhpStan]
     services:
       mysql-service:
         image: mysql:8
@@ -160,7 +160,7 @@ jobs:
           DB_HOST: 127.0.0.1
   Tests:
     runs-on: ubuntu-latest
-    needs: [ PhpCSFixer, PhpStan ]
+    needs: [PhpCSFixer, PhpStan]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -183,7 +183,7 @@ jobs:
           DB_PORT: ${{ job.services.mysql-service.ports[3306]}}
   SnykTests:
     runs-on: ubuntu-latest
-    needs: [ Tests, Migrate ]
+    needs: [Tests, Migrate]
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -195,7 +195,7 @@ jobs:
           snyk test
   SonarCloud:
     runs-on: ubuntu-latest
-    needs: [ Tests, Migrate ]
+    needs: [Tests, Migrate]
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -205,14 +205,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
   DockerBuild:
-    needs: [ SonarCloud, SnykTests ]
+    needs: [SonarCloud, SnykTests]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4 # More information on this action can be found below in the 'AWS Credentials' section
+        uses: aws-actions/configure-aws-credentials@v4 
+        # More information on this action can be found
+        # below in the 'AWS Credentials' section
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -234,7 +236,8 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: '${{ steps.login-ecr.outputs.registry }}/mdp-laravel-images:${{ github.sha }}'
+          image-ref: '${{ steps.login-ecr.outputs.registry }}
+          /mdp-laravel-images:${{ github.sha }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
         env:
@@ -256,7 +259,7 @@ jobs:
           sarif_file: 'trivy-results.sarif'
 
   ManualApproval:
-    needs: [ DockerBuild ]
+    needs: [DockerBuild]
     runs-on: ubuntu-latest
     steps:
       - uses: trstringer/manual-approval@v1

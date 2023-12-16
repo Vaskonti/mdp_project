@@ -20,6 +20,7 @@ RUN apk update && apk add -i \
     # sqlite3  \
     sqlite \
     nano \
+    zlib \
     kcron
     # cron
 
