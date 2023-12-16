@@ -6,12 +6,13 @@ ENV NODE_MAJOR=20
 ARG HOST_UID=1000
 ENV USER=www-data
 # Install system dependencies
-RUN apk update && apk add -i \
+RUN apk update && apk add --no-cache -i \
     git \
     curl \
     # libfreetype6-dev \
     # libjpeg62-turbo-dev \
-    libjpeg-turbo-dev libpng libpng-dev \
+    libjpeg-turbo-dev libpng-dev \
+    freetype freetype-dev \
     libmemcached-dev \
     openssh-server \
     zip \
@@ -22,12 +23,14 @@ RUN apk update && apk add -i \
     nano \
     zlib-dev \
     build-base jpeg-dev \
+    linux-headers \
+    autoconf \
     kcron
     # cron
 
 # Clear cache
 # RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-# RUN rm -rf /var/lib/apt/lists/*
+RUN rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions zip, mbstring, exif, bcmath, intl
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
@@ -61,8 +64,10 @@ ENTRYPOINT ["entrypoint.sh"]
 
 
 
-RUN usermod -u ${HOST_UID} www-data
-RUN groupmod -g ${HOST_UID} www-data
+# RUN usermod -u ${HOST_UID} www-data
+RUN addgroup -g ${HOST_UID} www-data
+# RUN addgroup -g ${HOST_UID} www-data
+# RUN groupmod -g ${HOST_UID} www-data
 
 RUN chmod -R 755 $WORKDIR
 RUN chown -R www-data:www-data $WORKDIR
