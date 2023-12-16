@@ -9,16 +9,20 @@ ENV USER=www-data
 RUN apk update && apk add -i \
     git \
     curl \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
+    # libfreetype6-dev \
+    # libjpeg62-turbo-dev \
+    libjpeg-turbo-dev \
     libmemcached-dev \
     openssh-server \
     zip \
     unzip \
     supervisor \
-    sqlite3  \
+    # sqlite3  \
+    sqlite \
     nano \
-    cron
+    kcron
+    # cron
+
 # Clear cache
 # RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # RUN rm -rf /var/lib/apt/lists/*
