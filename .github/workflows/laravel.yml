@@ -2,9 +2,9 @@ name: Laravel
 
 on:
   push:
-    branches: [ 'main', '*/*', '*']
+    branches: ['main', '*/*', '*']
   pull_request:
-    branches: [ '**' ]
+    branches: ['**']
 
 
 jobs:
@@ -33,7 +33,7 @@ jobs:
           --no-scripts --no-progress --prefer-dist
   ValidateYaml:
     runs-on: ubuntu-latest
-    needs: [ CacheComposer, GitLeaks ]
+    needs: [CacheComposer, GitLeaks]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -41,7 +41,7 @@ jobs:
         run: yamllint .
   CliMarkdown:
     runs-on: ubuntu-latest
-    needs: [ CacheComposer, GitLeaks ]
+    needs: [CacheComposer, GitLeaks]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -52,7 +52,7 @@ jobs:
   EditorConfig:
     name: Check .editorconfig file
     runs-on: ubuntu-latest
-    needs: [ CacheComposer, GitLeaks ]
+    needs: [CacheComposer, GitLeaks]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
