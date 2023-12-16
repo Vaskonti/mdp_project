@@ -6,21 +6,22 @@ ENV NODE_MAJOR=20
 ARG HOST_UID=1000
 ENV USER=www-data
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
+RUN apk update && apk add -i \
+    # git \
     curl \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     libmemcached-dev \
     openssh-server \
-    zip \
-    unzip \
+    # zip \
+    # unzip \
     supervisor \
-    sqlite3  \
-    nano \
-    cron
+    # sqlite3  \
+    # nano \
+    # cron
 # Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions zip, mbstring, exif, bcmath, intl
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
