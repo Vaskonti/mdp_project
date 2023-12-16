@@ -11,7 +11,7 @@ RUN apk update && apk add -i \
     curl \
     # libfreetype6-dev \
     # libjpeg62-turbo-dev \
-    libjpeg-turbo-dev \
+    libjpeg-turbo-dev libpng libpng-dev \
     libmemcached-dev \
     openssh-server \
     zip \
@@ -22,7 +22,6 @@ RUN apk update && apk add -i \
     nano \
     zlib-dev \
     build-base jpeg-dev \
-    libpng \
     kcron
     # cron
 
