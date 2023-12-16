@@ -1,75 +1,64 @@
-FROM php:8.2-fpm-alpine
+# Use a smaller base image
+ARG PHP_VERSION=8.2
+FROM php:${PHP_VERSION}-fpm-alpine
+
+# Define environment variables
 ARG WORKDIR=/var/www/html
-ENV DOCUMENT_ROOT=${WORKDIR}
-ENV LARAVEL_PROCS_NUMBER=1
-ENV NODE_MAJOR=20
-ARG HOST_UID=1000
-ENV USER=www-data
+ENV DOCUMENT_ROOT=${WORKDIR} \
+    LARAVEL_PROCS_NUMBER=1 \
+    NODE_MAJOR=20 \
+    HOST_UID=1000 \
+    USER=www-data
+
 # Install system dependencies
-RUN apk update && apk add --no-cache -i \
-    git \
-    curl \
-    # libfreetype6-dev \
-    # libjpeg62-turbo-dev \
-    libjpeg-turbo-dev libpng-dev \
-    freetype freetype-dev \
-    libmemcached-dev \
-    openssh-server \
-    zip \
-    unzip \
-    supervisor \
-    # sqlite3  \
-    sqlite \
-    nano \
-    zlib-dev \
-    build-base jpeg-dev \
-    linux-headers \
-    autoconf \
-    kcron
-    # cron
-
-# Clear cache
-# RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-RUN rm -rf /var/lib/apt/lists/*
-
-# Install PHP extensions zip, mbstring, exif, bcmath, intl
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-
-# Install Redis and enable it
-RUN pecl install redis  && docker-php-ext-enable redis
-
-# Install the PHP pdo_mysql extention
-RUN docker-php-ext-install pdo_mysql
-RUN pecl install mongodb && docker-php-ext-enable mongodb
-
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN apk add --no-cache \
+        curl \
+        freetype-dev \
+        libjpeg-turbo-dev \
+        libmemcached-dev \
+        supervisor \
+        sqlite \
+        dcron \
+        build-base \
+        autoconf \
+        pkgconfig \
+        libc-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd pdo_mysql \
+    && pecl install redis mongodb \
+    && docker-php-ext-enable redis mongodb \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && rm -rf /var/cache/apk/*
 
 # Set working directory
 WORKDIR $WORKDIR
 
-RUN rm -Rf /var/www/* && \
-mkdir -p /var/www/html
-
-#ADD src/index.php $WORKDIR/index.php
-#ADD src/php.ini $PHP_INI_DIR/conf.d/
-#ADD src/opcache.ini $PHP_INI_DIR/conf.d/
-#ADD src/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
-
+# Copy necessary files
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
-RUN ln -s /usr/local/bin/entrypoint.sh /
 
+# Check if the group exists before adding it
+RUN if ! getent group ${USER} > /dev/null 2>&1; then \
+        addgroup -g ${HOST_UID} ${USER}; \
+    fi
+
+# Add user to the group
+RUN if ! getent passwd ${USER} > /dev/null 2>&1; then \
+        adduser -u ${HOST_UID} -G ${USER} -s /bin/sh -D ${USER}; \
+    fi
+
+# Set permissions
+RUN chmod -R 755 $WORKDIR \
+    && chown -R www-data:www-data $WORKDIR
+
+# Expose port
+EXPOSE 9000
+
+# Entrypoint
 ENTRYPOINT ["entrypoint.sh"]
 
+# Healthcheck (optional)
+HEALTHCHECK CMD curl --fail http://localhost || exit 1
 
-
-# RUN usermod -u ${HOST_UID} www-data
-RUN addgroup -g ${HOST_UID} www-data
-# RUN addgroup -g ${HOST_UID} www-data
-# RUN groupmod -g ${HOST_UID} www-data
-
-RUN chmod -R 755 $WORKDIR
-RUN chown -R www-data:www-data $WORKDIR
-EXPOSE 9000
-CMD [ "entrypoint" ]
+# Default command
+CMD ["entrypoint"]
