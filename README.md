@@ -2,6 +2,12 @@
 
 A **Parking** app for demonstration purposes.
 
+## Pre-requisites
+
+- **Docker** and **Docker Compose** installed
+- **PHP 8.2** or higher
+- **Composer** installed
+
 ## Technologies used
 
 - **MongoDB** for storing cars
