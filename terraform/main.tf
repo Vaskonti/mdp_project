@@ -18,17 +18,17 @@ module "ccVPC" {
   private_subnet_cidrs = local.private_subnet_cidrs
 }
 
-module "db" {
-  source = "./modules/db"
+module "rds" {
+  source = "./modules/rds"
 
   cc_vpc_id               = module.ccVPC.vpc_id
   cc_private_subnets      = module.ccVPC.private_subnets
   cc_private_subnet_cidrs = local.private_subnet_cidrs
 
-  db_az            = local.availability_zones[0]
-  db_name          = "ccDatabaseInstance"
-  db_user_name     = var.db_user_name
-  db_user_password = var.db_user_password
+  rds_az            = local.availability_zones[0]
+  rds_name          = "ccDatabaseInstance"
+  rds_user_name     = var.rds_user_name
+  rds_user_password = var.rds_user_password
 }
 
 module "webserver" {
