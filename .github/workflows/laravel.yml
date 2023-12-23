@@ -2,7 +2,7 @@ name: Laravel
 
 on:
   push:
-    branches: ['main', 'gitleaks']
+    branches: ['main']
 
 
 jobs:
