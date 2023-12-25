@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+Route::get('/test', function (Request $request) {
+    return response()->json(['message' => 'Hello World!']);
+});
 Route::post('/enter', [\App\Http\Controllers\CarsController::class, 'enterParking'])->name('api.register-car');
 Route::post('/exit', [\App\Http\Controllers\CarsController::class, 'exitParking'])->name('api.unregister-car');
 Route::get('/available', [\App\Http\Controllers\CarsController::class, 'getFreeSlots'])->name('api.get-free-parking-slots');

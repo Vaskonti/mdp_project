@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6834520b4072cbe82f4f4f83b4d41dbc",
+    "content-hash": "958b72595c72e5a2f5203a01d36b8921",
     "packages": [
         {
             "name": "brick/math",
@@ -2937,6 +2937,74 @@
                 }
             ],
             "time": "2023-11-12T21:59:55+00:00"
+        },
+        {
+            "name": "polokij/laravel-vault-env",
+            "version": "v0.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Polokij/laravel-vault-env.git",
+                "reference": "99456ff682878e2e5e911d16e2147d6a41195615"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Polokij/laravel-vault-env/zipball/99456ff682878e2e5e911d16e2147d6a41195615",
+                "reference": "99456ff682878e2e5e911d16e2147d6a41195615",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^9.0 | ^10.0",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "barryvdh/laravel-ide-helper": "^2.13",
+                "phpunit/phpunit": "^10.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaravelVault\\VaultServiceProvider"
+                    ],
+                    "aliases": {
+                        "Vault": "LaravelVault\\VaultFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelVault\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vitalii Liubimov",
+                    "email": "vitalii@liubimov.org"
+                }
+            ],
+            "description": "Hashicorp Vault client for Laravel with possibility set the env variables from Vault secret dynamically",
+            "keywords": [
+                "api client",
+                "bootstrapper",
+                "dynamic",
+                "env",
+                "environemnt variables",
+                "hashicorp",
+                "laravel",
+                "multi-tenant",
+                "secret",
+                "secret storage",
+                "vault"
+            ],
+            "support": {
+                "issues": "https://github.com/Polokij/laravel-vault-env/issues",
+                "source": "https://github.com/Polokij/laravel-vault-env/tree/v0.1.5"
+            },
+            "time": "2023-12-15T12:05:20+00:00"
         },
         {
             "name": "predis/predis",
@@ -9511,7 +9579,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.2"
+        "php": "^8.2",
+        "ext-redis": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.6.0"

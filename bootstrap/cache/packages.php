@@ -56,6 +56,17 @@
       0 => 'Termwind\\Laravel\\TermwindServiceProvider',
     ),
   ),
+  'polokij/laravel-vault-env' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'LaravelVault\\VaultServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Vault' => 'LaravelVault\\VaultFacade',
+    ),
+  ),
   'spatie/laravel-ignition' => 
   array (
     'providers' => 

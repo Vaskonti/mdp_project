@@ -11,9 +11,44 @@
 |
 */
 
+use Illuminate\Config\Repository;
+use LaravelVault\LoadEnvironmentVariablesVault;
+
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
+$app->afterLoadingEnvironment(function () use ($app) {
+  // checking is the feature enabled
+  if (env('VAULT_LOAD_ENV', false)) {
+    try {
+      $tenantId = env('TENANT_ID');
+
+      // resolving tenant_id by headers - make sure proxy override this header for security reason
+      if (!$tenantId) {
+        $headers = collect(getallheaders());
+        $tenantIdHeader = env('TENANT_ID_HEADER', 'tenant-id');
+        $tenantId = $headers
+          ->first(fn($value, $key) => $key === $tenantIdHeader
+            || strtolower($key) === $tenantIdHeader);
+      }
+
+      if (!$tenantId) {
+        throw new Exception('Missed Tenant_id ');
+      }
+
+      $envRepository = Env::getRepository();
+      $vaultDefaultPrefix = $envRepository->get('VAULT_KEY_PREFIX');
+      $envRepository->set('VAULT_KEY_PREFIX', $vaultDefaultPrefix.'/'.$tenantId);
+
+      (new LoadEnvironmentVariablesVault)->bootstrap($app);
+    } catch (Throwable $e) {
+      // preparing the logs for exception
+      $app->instance('config', $config = new Repository([]));
+
+      throw $e;
+    }
+  }
+});
 
 /*
 |--------------------------------------------------------------------------

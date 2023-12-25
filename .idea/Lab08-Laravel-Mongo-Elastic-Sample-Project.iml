@@ -135,6 +135,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/graham-campbell/result-type" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/dragonmantank/cron-expression" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/elasticsearch/elasticsearch" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/polokij/laravel-vault-env" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-redis": "*",
         "elasticsearch/elasticsearch": "^7.5",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.0",
@@ -14,9 +15,8 @@
         "laravel/tinker": "^2.7",
         "mongodb/laravel-mongodb": "^4.0",
         "mongodb/mongodb": "^1.12",
-        "predis/predis": "^2.2",
-        "ext-mongo": "*",
-        "ext-redis": "*"
+        "polokij/laravel-vault-env": "^0.1.5",
+        "predis/predis": "^2.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
