@@ -28,12 +28,10 @@ A **Parking** app for demonstration purposes.
     > php artisan key:generate
 3. Install all dependencies from composer
     > composer install
-4. Create a certificate key and certificate for the Vault
-    > cd vault-volume && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout key.pem -out certificate.pem
-5. Run the sail environment
+4. Run the sail environment
    > ./vendor/bin/sail build
    > ./vendor/bin/sail up -d
-6. Run the migrations:
+5. Run the migrations:
    > ./vendor/bin/sail artisan migrate
 
 ## Functionality
