@@ -6,6 +6,8 @@ A **Parking** app for demonstration purposes.
 
 - **Docker** and **Docker Compose** installed
 - **PHP 8.2** or higher
+- **PHP redis** extension installed
+- **PHP MongoDB** extension installed 
 - **Composer** installed
 
 ## Technologies used
@@ -21,16 +23,18 @@ A **Parking** app for demonstration purposes.
 ## Project Setup
 
 1. Copy the **.env.project** contents into **.env** file
-    > cp .env.example .env
-2. Run the sail environment
-    > ./vendor/bin/sail build
-    > ./vendor/bin/sail up -d
-3. Run the migrations:
-    > ./vendor/bin/sail artisan migrate
-4. Generate a key:
-    > ./vendor/bin/sail artisan key:generate
-5. Install all dependencies from composer
-    > ./vendor/bin/sail composer install
+    > cp .env.ci .env
+2. Application Keys
+    > php artisan key:generate
+3. Install all dependencies from composer
+    > composer install
+4. Create a certificate key and certificate for the Vault
+    > cd vault-volume && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout key.pem -out certificate.pem
+5. Run the sail environment
+   > ./vendor/bin/sail build
+   > ./vendor/bin/sail up -d
+6. Run the migrations:
+   > ./vendor/bin/sail artisan migrate
 
 ## Functionality
 

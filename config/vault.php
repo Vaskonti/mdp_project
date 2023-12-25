@@ -2,7 +2,7 @@
 
 return [
     // Vault address
-    'url' => env('VAULT_ADDR', 'http://vault:8201'),
+    'url' => env('VAULT_ADDR', 'https://vault:8201'),
 
     // Vault parameters - required is not specified the VAULT_ADDRESS
     'host' => env('VAULT_HOST', 'vault'),
