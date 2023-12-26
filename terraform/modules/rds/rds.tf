@@ -33,12 +33,13 @@ resource "aws_db_instance" "ccRDS" {
   availability_zone      = var.rds_az
   db_subnet_group_name   = aws_db_subnet_group.ccDBSubnetGroup.name
   vpc_security_group_ids = [aws_security_group.ccDBSecurityGroup.id]
-  allocated_storage      = 20
+  count                  = 1
+  allocated_storage      = 10
+  identifier             = var.rds_name
   storage_type           = "standard"
   engine                 = "mysql"
   engine_version         = "8.0.35"
   instance_class         = "db.t2.micro"
-  name                   = var.rds_name
   username               = var.rds_user_name
   password               = var.rds_user_password
   skip_final_snapshot    = true
@@ -46,4 +47,16 @@ resource "aws_db_instance" "ccRDS" {
     Name    = "ccRDS"
     Project = "CC TF Demo"
   }
+}
+
+resource "aws_db_instance" "ccRDS-replica" {
+  count             = 1
+  identifier        = "${aws_db_instance.ccRDS[0].identifier}-replica"
+  engine            = "mysql"
+  instance_class    = "db.t2.micro"
+  allocated_storage = 10
+  username          = var.rds_user_name
+  password          = var.rds_user_password
+
+  replicate_source_db = aws_db_instance.ccRDS[0].id
 }
