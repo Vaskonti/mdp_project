@@ -15,8 +15,8 @@ resource "aws_security_group" "ccDBSecurityGroup" {
   vpc_id = var.cc_vpc_id
 
   ingress {
-    from_port = 5432
-    to_port   = 5432
+    from_port = 3306
+    to_port   = 3306
     protocol  = "tcp"
     cidr_blocks = [
       var.cc_private_subnet_cidrs[0],
@@ -35,8 +35,8 @@ resource "aws_db_instance" "ccRDS" {
   vpc_security_group_ids = [aws_security_group.ccDBSecurityGroup.id]
   allocated_storage      = 20
   storage_type           = "standard"
-  engine                 = "postgres"
-  engine_version         = "12"
+  engine                 = "mysql"
+  engine_version         = "8.0.35"
   instance_class         = "db.t2.micro"
   name                   = var.rds_name
   username               = var.rds_user_name
