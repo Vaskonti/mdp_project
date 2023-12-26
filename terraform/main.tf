@@ -18,6 +18,12 @@ module "ccVPC" {
   private_subnet_cidrs = local.private_subnet_cidrs
 }
 
+module "elasticsearch" {
+  source = "./modules/elasticsearch"
+
+  cc_private_subnets = module.ccVPC.private_subnets
+}
+
 module "rds" {
   source = "./modules/rds"
 
