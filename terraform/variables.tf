@@ -22,3 +22,24 @@ variable "rds_user_password" {
     error_message = "DB User Password must not be empty."
   }
 }
+
+
+variable "docdb_user_name" {
+  description = "RDS DB User"
+  type        = string
+  sensitive   = true
+  validation {
+    condition     = length(var.docdb_user_name) > 5
+    error_message = "DB UserName must not be empty."
+  }
+}
+
+variable "docdb_user_password" {
+  description = "RDS DB User Password"
+  type        = string
+  sensitive   = true
+  validation {
+    condition     = length(var.docdb_user_password) > 8
+    error_message = "DB User Password must not be empty."
+  }
+}

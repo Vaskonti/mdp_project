@@ -26,9 +26,22 @@ module "rds" {
   cc_private_subnet_cidrs = local.private_subnet_cidrs
 
   rds_az            = local.availability_zones[0]
-  rds_name          = "ccDatabaseInstance"
+  rds_name          = "cc-rds-database-instance"
   rds_user_name     = var.rds_user_name
   rds_user_password = var.rds_user_password
+}
+
+module "docdb" {
+  source = "./modules/docdb"
+
+  cc_vpc_id               = module.ccVPC.vpc_id
+  cc_private_subnets      = module.ccVPC.private_subnets
+  cc_private_subnet_cidrs = local.private_subnet_cidrs
+
+  docdb_az            = local.availability_zones[0]
+  docdb_name          = "doc-db-instance"
+  docdb_user_name     = var.docdb_user_name
+  docdb_user_password = var.docdb_user_password
 }
 
 module "webserver" {
