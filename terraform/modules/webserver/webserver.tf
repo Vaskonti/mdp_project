@@ -12,6 +12,22 @@ resource "aws_security_group" "ccWebserverSecurityGroup" {
       cidr_blocks = ingress.value["cidr_blocks"]
     }
   }
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  dynamic "ingress" {
+    for_each = var.ingress_rules
+    content {
+      from_port   = ingress.value["port"]
+      to_port     = ingress.value["port"]
+      protocol    = ingress.value["proto"]
+      cidr_blocks = ingress.value["cidr_blocks"]
+    }
+  }
 
   egress {
     from_port   = 0
@@ -89,15 +105,7 @@ resource "aws_instance" "webserver1" {
   security_groups             = [aws_security_group.ccWebserverSecurityGroup.id]
   associate_public_ip_address = true
 
-  user_data = <<-EOF
-              #!/bin/bash -xe
-              sudo su 
-              yum update -y 
-              yum install -y httpd 
-              echo "<h1>Hello, World!</h1>server: ccWebServer1" > /var/www/html/index.html 
-              echo "healthy" > /var/www/html/hc.html 
-              service httpd start
-              EOF
+  user_data = local.setup_script
 }
 
 resource "aws_instance" "webserver2" {
@@ -109,13 +117,5 @@ resource "aws_instance" "webserver2" {
   associate_public_ip_address = true
 
   # Specify what code will the server run
-  user_data = <<-EOF
-              #!/bin/bash -xe
-              sudo su 
-              yum update -y 
-              yum install -y httpd 
-              echo "<h1>Hello, World!</h1>server: ccWebServer2" > /var/www/html/index.html 
-              echo "healthy" > /var/www/html/hc.html 
-              service httpd start
-              EOF    
+  user_data = local.setup_script
 }
