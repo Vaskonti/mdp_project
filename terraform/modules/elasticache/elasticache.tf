@@ -1,5 +1,5 @@
 resource "aws_elasticache_subnet_group" "elasticache_subnet_group" {
-  name = "elasticache_subnet_group"
+  name = "elasticache-subnet-group"
   subnet_ids = [
     var.cc_private_subnets[0].id,
     var.cc_private_subnets[1].id
@@ -22,14 +22,18 @@ resource "aws_security_group" "elasticache_sg" {
   }
 }
 
-resource "aws_elasticache_cluster" "elasticache_cluster" {
-  cluster_id           = var.elasticache_name
+resource "aws_elasticache_replication_group" "elasticache_cluster" {
+  replication_group_id = var.elasticache_name
+  description          = "Redis cluster for Hashicorp ElastiCache"
   engine               = "redis"
-  node_type            = "cache.t2.micro"
-  num_cache_nodes      = 1
-  subnet_group_name    = aws_elasticache_subnet_group.elasticache_subnet_group.name
-  security_group_ids   = [aws_security_group.elasticache_sg.id]
-  parameter_group_name = "default.redis5.0"
+
+  node_type          = "cache.t2.micro"
+  subnet_group_name  = aws_elasticache_subnet_group.elasticache_subnet_group.name
+  security_group_ids = [aws_security_group.elasticache_sg.id]
+  #   parameter_group_name = "default.redis5.0"
+
+  snapshot_retention_limit = 5
+  snapshot_window          = "00:00-05:00"
 
   tags = {
     Name    = "ElastiCache"

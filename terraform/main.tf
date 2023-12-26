@@ -33,8 +33,8 @@ module "rds" {
 
   rds_az            = local.availability_zones[0]
   rds_name          = "cc-rds-database-instance"
-  rds_user_name     = var.rds_user_name
-  rds_user_password = var.rds_user_password
+  rds_user_name     = "rdsUser1"
+  rds_user_password = "rdsUser1Password"
 }
 
 module "docdb" {
@@ -46,8 +46,8 @@ module "docdb" {
 
   docdb_az            = local.availability_zones[0]
   docdb_name          = "doc-db-instance"
-  docdb_user_name     = var.docdb_user_name
-  docdb_user_password = var.docdb_user_password
+  docdb_user_name     = "docDBUser"
+  docdb_user_password = "docDBPassword"
 }
 
 module "elasticache" {
@@ -65,4 +65,9 @@ module "webserver" {
 
   cc_vpc_id         = module.ccVPC.vpc_id
   cc_public_subnets = module.ccVPC.public_subnets
+}
+
+resource "aws_key_pair" "ccKP" {
+  key_name   = "ccKP"
+  public_key = file("${path.module}/keypair/public-key.pub")
 }

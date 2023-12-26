@@ -9,8 +9,8 @@ resource "aws_elasticsearch_domain" "elasticache_domain" {
     volume_size = 10
   }
   vpc_options {
-    subnet_ids = [var.cc_private_subnets[0].id,
-    var.cc_private_subnets[1].id]
+    subnet_ids = [var.cc_private_subnets[0].id]
+    # var.cc_private_subnets[1].id]
   }
   access_policies = <<POLICY
 {
