@@ -44,6 +44,16 @@ module "docdb" {
   docdb_user_password = var.docdb_user_password
 }
 
+module "elasticache" {
+  source = "./modules/elasticache"
+
+  cc_vpc_id               = module.ccVPC.vpc_id
+  cc_private_subnets      = module.ccVPC.private_subnets
+  cc_private_subnet_cidrs = local.private_subnet_cidrs
+
+  elasticache_name = "elasticache-instance"
+}
+
 module "webserver" {
   source = "./modules/webserver"
 
