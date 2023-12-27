@@ -69,7 +69,14 @@ jobs:
         with:
           php-version: '8.2'
           extensions: mysql, mongodb
-      - name: Composer Install
+      - name: Restore Composer dependencies from cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction
           --no-scripts --no-progress --prefer-dist
       - name: PHP Stan
@@ -87,7 +94,14 @@ jobs:
         with:
           php-version: '8.2'
           extensions: mysql, mongodb
-      - name: Composer Install
+      - name: Restore Composer dependencies from cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction
           --no-scripts --no-progress --prefer-dist
       - name: PHP CS Fixer
@@ -130,6 +144,13 @@ jobs:
         with:
           php-version: '8.2'
           extensions: mysql, mongodb
+      - name: Restore Composer dependencies from cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
       - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction
           --no-scripts --no-progress --prefer-dist
@@ -154,6 +175,13 @@ jobs:
         with:
           php-version: '8.2'
           extensions: mysql, mongodb
+      - name: Restore Composer dependencies from cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
       - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction
           --no-scripts --no-progress --prefer-dist
@@ -264,3 +292,4 @@ jobs:
           issue-title: "Deploying v1.3.5 to prod from staging"
           issue-body: "Please approve or deny the deployment of version v1.3.5."
           exclude-workflow-initiator-as-approver: false
+
