@@ -129,8 +129,8 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
-      - if: ${{ steps.composer-cache.outputs.cache-hit == 'false' }}
-        name: Install Composer dependencies
+#      - if: ${{ steps.composer-cache.outputs.cache-hit == 'false' }}
+      - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction
           --no-scripts --no-progress --prefer-dist
       - name: Configure Laravel
