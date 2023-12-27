@@ -35,7 +35,6 @@ resource "aws_db_instance" "ccRDS" {
   vpc_security_group_ids  = [aws_security_group.ccDBSecurityGroup.id]
   allocated_storage       = 10
   identifier              = var.rds_name
-  name                    = var.rds_name
   storage_type            = "standard"
   skip_final_snapshot     = true
   backup_retention_period = 7
