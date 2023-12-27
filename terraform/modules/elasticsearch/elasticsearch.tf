@@ -12,21 +12,21 @@ resource "aws_elasticsearch_domain" "elasticache_domain" {
     subnet_ids = [var.cc_private_subnets[0].id]
     # var.cc_private_subnets[1].id]
   }
-  access_policies = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "es.amazonaws.com"
-      },
-      "Action": "es:ESHttp*",
-      "Resource": "arn:aws:es:us-east-1:123456789012:domain/my-elasticsearch-domain/*"
-    }
-  ]
-}
-POLICY
+  #   access_policies = <<POLICY
+  # {
+  #   "Version": "2012-10-17",
+  #   "Statement": [
+  #     {
+  #       "Effect": "Allow",
+  #       "Principal": {
+  #         "Service": "es.amazonaws.com"
+  #       },
+  #       "Action": "es:ESHttp*",
+  #       "Resource": "arn:aws:es:us-east-1:123456789012:domain/my-elasticsearch-domain/*"
+  #     }
+  #   ]
+  # }
+  # POLICY
 }
 
 output "elasticsearch_endpoint" {
