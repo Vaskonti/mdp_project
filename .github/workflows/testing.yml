@@ -69,15 +69,13 @@ jobs:
           php-version: '8.2'
           extensions: mysql, mongodb
       - name: Restore Composer dependencies from cache
-        id: composer-cache
         uses: actions/cache@v3
         with:
           path: ${{ github.workspace }}/vendor
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
-      - if: ${{ steps.composer-cache.outputs.cache-hit == 'false' }}
-        name: Composer Install
+      - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction
           --no-scripts --no-progress --prefer-dist
       - name: PHP Stan
@@ -96,15 +94,13 @@ jobs:
           php-version: '8.2'
           extensions: mysql, mongodb
       - name: Restore Composer dependencies from cache
-        id: composer-cache
         uses: actions/cache@v3
         with:
           path: ${{ github.workspace }}/vendor
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
-      - if: ${{ steps.composer-cache.outputs.cache-hit == 'false' }}
-        name: Composer Install
+      - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction
           --no-scripts --no-progress --prefer-dist
       - name: PHP CS Fixer
@@ -122,15 +118,13 @@ jobs:
           php-version: '8.2'
           extensions: mysql, mongodb
       - name: Restore Composer dependencies from cache
-        id: composer-cache
         uses: actions/cache@v3
         with:
           path: ${{ github.workspace }}/vendor
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
-      - if: ${{ steps.composer-cache.outputs.cache-hit == 'false' }}
-        name: Install Composer dependencies
+      - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction
           --no-scripts --no-progress --prefer-dist
       - name: Configure Laravel
