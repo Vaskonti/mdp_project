@@ -75,7 +75,8 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
-      - name: Composer Install
+      - if: ${{ steps.cache-npm.outputs.cache-hit != 'false' }}
+        name: Composer Install
         run: composer install --no-ansi --no-interaction
           --no-scripts --no-progress --prefer-dist
       - name: PHP Stan
@@ -100,7 +101,8 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
-      - name: Composer Install
+      - if: ${{ steps.cache-npm.outputs.cache-hit != 'false' }}
+        name: Composer Install
         run: composer install --no-ansi --no-interaction
           --no-scripts --no-progress --prefer-dist
       - name: PHP CS Fixer
@@ -124,7 +126,8 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
-      - name: Install Composer dependencies
+      - if: ${{ steps.cache-npm.outputs.cache-hit != 'false' }}
+        name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction
           --no-scripts --no-progress --prefer-dist
       - name: Configure Laravel
