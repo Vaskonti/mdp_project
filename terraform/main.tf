@@ -63,6 +63,8 @@ module "elasticache" {
 module "webserver" {
   source = "./modules/webserver"
 
+  webserver_az = local.availability_zones[0]
+
   cc_vpc_id         = module.ccVPC.vpc_id
   cc_public_subnets = module.ccVPC.public_subnets
 }

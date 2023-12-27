@@ -31,3 +31,12 @@ variable "ingress_rules" {
     }
   ]
 }
+
+variable "webserver_az" {
+  description = "DB Availability Zone"
+  type        = string
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9\\-]+$", var.rds_az))
+    error_message = "DB Availability Zone must not be empty."
+  }
+}

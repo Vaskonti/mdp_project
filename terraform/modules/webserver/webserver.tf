@@ -101,21 +101,40 @@ resource "aws_instance" "webserver1" {
   ami                         = local.ami_id
   instance_type               = local.instance_type
   key_name                    = local.key_name
+  availability_zone           = var.webserver_az
   subnet_id                   = var.cc_public_subnets[0].id
   security_groups             = [aws_security_group.ccWebserverSecurityGroup.id]
   associate_public_ip_address = true
 
   user_data = local.setup_script
+
+  tags = {
+    Name = "EC2Instance1"
+  }
+}
+
+output "ec2instance1_ip" {
+  description = "The public ip for ssh access"
+  value       = aws_instance.webserver1.public_ip
 }
 
 resource "aws_instance" "webserver2" {
   ami                         = local.ami_id
   instance_type               = local.instance_type
   key_name                    = local.key_name
+  availability_zone           = var.webserver_az
   subnet_id                   = var.cc_public_subnets[0].id
   security_groups             = [aws_security_group.ccWebserverSecurityGroup.id]
   associate_public_ip_address = true
 
-  # Specify what code will the server run
   user_data = local.setup_script
+
+  tags = {
+    Name = "EC2Instance2"
+  }
+}
+
+output "ec2instance2_ip" {
+  description = "The public ip for ssh access"
+  value       = aws_instance.webserver2.public_ip
 }
