@@ -56,6 +56,7 @@ output "rds-url" {
 resource "aws_db_instance" "ccRDS-replica" {
   identifier              = "${aws_db_instance.ccRDS.identifier}-replica"
   instance_class          = "db.t2.micro"
+  skip_final_snapshot     = true
   backup_retention_period = 7
   replicate_source_db     = aws_db_instance.ccRDS.identifier
 }
