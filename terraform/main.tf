@@ -69,6 +69,14 @@ module "webserver" {
   cc_public_subnets = module.ccVPC.public_subnets
 }
 
+output "webserver1_public_ip" {
+  value = module.webserver.webserver1_public_ip
+}
+
+output "webserver2_public_ip" {
+  value = module.webserver.webserver2_public_ip
+}
+
 resource "aws_key_pair" "ccKP" {
   key_name   = "ccKP"
   public_key = file("${path.module}/keypair/public-key.pub")
