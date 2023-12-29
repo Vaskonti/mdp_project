@@ -1,7 +1,7 @@
 #!/bin/bash
 # Cloning project
 sudo mkdir /var/www/mdp_project && 
-git clone https://github.com/VasilHristovDev/mdp_project /var/www/mdp_project && 
+sudo git clone https://github.com/VasilHristovDev/mdp_project /var/www/mdp_project && 
 
 # Disabling and removing apache2
 sudo systemctl stop apache2 &&
