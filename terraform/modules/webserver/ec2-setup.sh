@@ -4,9 +4,9 @@ sudo mkdir /var/www/mdp_project &&
 sudo git clone https://github.com/VasilHristovDev/mdp_project /var/www/mdp_project && 
 
 # Disabling and removing apache2
-sudo systemctl stop apache2 &&
-sudo systemctl disable apache2 &&
-sudo apt purge apache2 && sudo apt autoremove &&
+# sudo systemctl stop apache2 &&
+# sudo systemctl disable apache2 &&
+# sudo apt purge apache2 && sudo apt autoremove &&
 
 # Installing dependencies
 sudo apt update && sudo apt upgrade -y &&
