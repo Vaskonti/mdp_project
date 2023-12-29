@@ -32,9 +32,9 @@ module "rds" {
   cc_private_subnet_cidrs = local.private_subnet_cidrs
 
   rds_az            = local.availability_zones[0]
-  rds_name          = "cc-rds-database-instance"
-  rds_user_name     = "rdsUser1"
-  rds_user_password = "rdsUser1Password"
+  rds_name          = "parking"
+  rds_user_name     = "root"
+  rds_user_password = "password"
 }
 
 module "docdb" {
@@ -45,9 +45,9 @@ module "docdb" {
   cc_private_subnet_cidrs = local.private_subnet_cidrs
 
   docdb_az            = local.availability_zones[0]
-  docdb_name          = "doc-db-instance"
-  docdb_user_name     = "docDBUser"
-  docdb_user_password = "docDBPassword"
+  docdb_name          = "parking"
+  docdb_user_name     = "root"
+  docdb_user_password = "password"
 }
 
 module "elasticache" {
@@ -69,6 +69,11 @@ module "webserver" {
   cc_public_subnets = module.ccVPC.public_subnets
 }
 
+resource "aws_key_pair" "ccKP" {
+  key_name   = "ccKP"
+  public_key = file("${path.module}/keypair/public-key.pub")
+}
+
 output "webserver1_public_ip" {
   value = module.webserver.webserver1_public_ip
 }
@@ -77,7 +82,36 @@ output "webserver2_public_ip" {
   value = module.webserver.webserver2_public_ip
 }
 
-resource "aws_key_pair" "ccKP" {
-  key_name   = "ccKP"
-  public_key = file("${path.module}/keypair/public-key.pub")
+output "rds-endpoint" {
+  value = module.rds.rds-endpoint
+}
+
+output "rds-username" {
+  value     = module.rds.rds-username
+  sensitive = true
+}
+
+output "rds-password" {
+  value     = module.rds.rds-password
+  sensitive = true
+}
+
+output "rds-url" {
+  value = module.rds.rds-url
+}
+
+output "rds-replica-url" {
+  value = module.rds.replica-url
+}
+
+output "docdb-endpoint" {
+  value = module.docdb.docdb-endpoint
+}
+output "docdb-username" {
+  value     = module.docdb.docdb-username
+  sensitive = true
+}
+output "docdb-password" {
+  value     = module.docdb.docdb-password
+  sensitive = true
 }
