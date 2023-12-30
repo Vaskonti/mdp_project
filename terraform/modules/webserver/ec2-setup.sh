@@ -1,6 +1,6 @@
 #!/bin/bash
 # Ensuring permissions
-[ `whoami` = root ] || exec su -c $0 root 
+[ `whoami` = root ] || exec sudo su -c $0 root 
 
 # Cloning project
 sudo mkdir /var/www ||
