@@ -15,9 +15,11 @@ sudo apt install composer nginx php-mongo -y &&
 # Project setup
 cd /var/www/mdp_project &&
 sudo cp .env.ci .env &&
-composer install &&
+pecl install mongodb -y &&
+sudo echo "extension=mongodb.so" >> /etc/php/8.2/cli/php.ini
+sudo composer install -y &&
 php artisan key:generate &&
-php artisan migrate &&
+php artisan migrate ||
 
 # Nginx setup
 sudo cp /var/www/mdp_project/terraform/modules/webserver/nginx.conf /etc/nginx/sites-available/mdp_project &&
