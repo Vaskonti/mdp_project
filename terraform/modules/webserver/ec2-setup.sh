@@ -1,4 +1,7 @@
 #!/bin/bash
+# Ensuring permissions
+[ `whoami` = root ] || exec su -c $0 root 
+
 # Cloning project
 sudo mkdir /var/www/mdp_project && 
 sudo git clone https://github.com/VasilHristovDev/mdp_project /var/www/mdp_project && 
@@ -16,7 +19,7 @@ sudo apt install composer nginx php-mongo -y &&
 cd /var/www/mdp_project &&
 sudo cp .env.ci .env &&
 pecl install mongodb -y &&
-sudo echo "extension=mongodb.so" >> /etc/php/8.2/cli/php.ini
+sudo echo "extension=mongodb.so" >> /etc/php/8.2/cli/php.ini &&
 sudo composer install -y &&
 php artisan key:generate &&
 php artisan migrate ||
