@@ -31,4 +31,5 @@ cd /etc/nginx/sites-enabled &&
 sudo ln -s /etc/nginx/sites-available/mdp_project &&
 sudo rm /etc/nginx/sites-available/default &&
 sudo rm /etc/nginx/sites-enabled/default &&
-sudo systemctl start nginx
+sudo systemctl start nginx && 
+sudo systemctl restart nginx
