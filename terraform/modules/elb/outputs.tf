@@ -5,3 +5,7 @@ output "elb_security_group_id" {
 output "elb_id" {
   value = aws_elb.web_elb.id
 }
+
+output "elb_endpoint" {
+  value = aws_elb.web_elb.endpoint
+}
