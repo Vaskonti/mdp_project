@@ -1,5 +1,5 @@
 # Creating Security Group for ELB
-resource "aws_security_group" "demosg1" {
+resource "aws_security_group" "ElbSG" {
   name        = "Demo Security Group"
   description = "Demo Module"
   vpc_id      = var.cc_vpc_id # Inbound Rules
