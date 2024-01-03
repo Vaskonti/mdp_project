@@ -7,5 +7,5 @@ output "elb_id" {
 }
 
 output "elb_endpoint" {
-  value = aws_elb.web_elb.endpoint
+  value = aws_elb.web_elb.dns_name
 }
