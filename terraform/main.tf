@@ -76,40 +76,13 @@ module "asg" {
   subnet2_id            = module.ccVPC.public_subnets[1].id
 }
 
-module "webserver" {
-  source = "./modules/webserver"
-
-  webserver_az = local.availability_zones[0]
-
-  cc_vpc_id         = module.ccVPC.vpc_id
-  cc_public_subnets = module.ccVPC.public_subnets
-}
-
 resource "aws_key_pair" "ccKP" {
   key_name   = "ccKP"
   public_key = file("${path.module}/keypair/public-key.pub")
 }
 
-output "webserver1_public_ip" {
-  value = module.webserver.webserver1_public_ip
-}
-
-output "webserver2_public_ip" {
-  value = module.webserver.webserver2_public_ip
-}
-
 output "rds-endpoint" {
   value = module.rds.rds-endpoint
-}
-
-output "rds-username" {
-  value     = module.rds.rds-username
-  sensitive = true
-}
-
-output "rds-password" {
-  value     = module.rds.rds-password
-  sensitive = true
 }
 
 output "rds-url" {
@@ -123,15 +96,7 @@ output "rds-replica-url" {
 output "docdb-endpoint" {
   value = module.docdb.docdb-endpoint
 }
-output "docdb-username" {
-  value     = module.docdb.docdb-username
-  sensitive = true
-}
-output "docdb-password" {
-  value     = module.docdb.docdb-password
-  sensitive = true
-}
 
 output "load_balancer_dns_name" {
-  value = module.webserver.load_balancer_dns_name
+  value = module.elb.elb_endpoint
 }
