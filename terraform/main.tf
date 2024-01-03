@@ -60,6 +60,20 @@ module "elasticache" {
   elasticache_name = "elasticache-instance"
 }
 
+module "elb" {
+  source     = "./modules/elb"
+  cc_vpc_id  = module.ccVPC.vpc_id
+  subnet1_id = module.ccVPC.public_subnets[0].id
+  subnet2_id = module.ccVPC.public_subnets[1].id
+}
+
+module "asg" {
+  source                = "./modules/asg"
+  cc_vpc_id             = module.ccVPC.vpc_id
+  elb_security_group_id = module.elb.elb_security_group_id
+  elb_id                = module.elb.elb_id
+}
+
 module "webserver" {
   source = "./modules/webserver"
 
