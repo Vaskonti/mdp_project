@@ -2,6 +2,8 @@
 
 A **Parking** app for demonstration purposes.
 
+![Diagram](./public/mdp_diagram.png)
+
 ## Pre-requisites
 
 - **Docker** and **Docker Compose** installed
