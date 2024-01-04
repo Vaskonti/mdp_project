@@ -1,7 +1,7 @@
 # Creating Security Group for EC2
 resource "aws_security_group" "ec2_sg" {
-  name        = "EC2 security group"
-  description = ""
+  name        = "ec2sg"
+  description = "EC2 security group"
   vpc_id      = var.cc_vpc_id # Inbound Rules
   # HTTP access from anywhere
   ingress {
