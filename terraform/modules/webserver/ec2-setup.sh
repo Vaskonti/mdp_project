@@ -2,13 +2,22 @@
 # Ensuring permissions
 [ `whoami` = root ] || exec sudo su -c $0 root 
 
+# Disabling restarting of services after updates
+sudo apt remove needrestart -y
+
+# Installing CodeDeploy agent
+sudo apt update && sudo apt upgrade -y &&
+sudo apt install ruby-full wget -y &&
+cd /home/ubuntu &&
+sudo wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install &&
+sudo chmod +x ./install &&
+sudo ./install auto &&
+sudo service codedeploy-agent start &&
+
 # Cloning project
 sudo mkdir /var/www ||
 sudo mkdir /var/www/mdp_project && 
 sudo git clone https://github.com/VasilHristovDev/mdp_project /var/www/mdp_project && 
-
-# Disabling restarting of services after updates
-sudo apt remove needrestart -y
 
 # Installing dependencies
 sudo apt update && sudo apt upgrade -y &&
