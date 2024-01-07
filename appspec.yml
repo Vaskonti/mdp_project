@@ -9,6 +9,3 @@ branch_config:
     deploymentGroupName: laravel-app-deployment-group
     deploymentGroupConfig:
       serviceRoleArn: arn:aws:iam::262736261154:role/CodeDeployRole
-    deploymentConfig:
-      autoRollbackConfiguration:
-        enabled: true
