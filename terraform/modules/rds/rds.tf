@@ -43,6 +43,8 @@ resource "aws_db_instance" "ccRDS" {
   instance_class          = "db.t2.micro"
   username                = var.rds_user_name
   password                = var.rds_user_password
+  db_name                 = var.rds_name
+  publicly_accessible     = false
   tags = {
     Name    = "ccRDS"
     Project = "CC TF Demo"

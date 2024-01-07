@@ -113,11 +113,6 @@ resource "aws_instance" "webserver1" {
   }
 }
 
-output "ec2instance1_ip" {
-  description = "The public ip for ssh access"
-  value       = aws_instance.webserver1.public_ip
-}
-
 resource "aws_instance" "webserver2" {
   ami                         = local.ami_id
   instance_type               = local.instance_type
@@ -132,9 +127,4 @@ resource "aws_instance" "webserver2" {
   tags = {
     Name = "EC2Instance2"
   }
-}
-
-output "ec2instance2_ip" {
-  description = "The public ip for ssh access"
-  value       = aws_instance.webserver2.public_ip
 }

@@ -32,9 +32,9 @@ module "rds" {
   cc_private_subnet_cidrs = local.private_subnet_cidrs
 
   rds_az            = local.availability_zones[0]
-  rds_name          = "cc-rds-database-instance"
-  rds_user_name     = "rdsUser1"
-  rds_user_password = "rdsUser1Password"
+  rds_name          = "parking"
+  rds_user_name     = "root"
+  rds_user_password = "password"
 }
 
 module "docdb" {
@@ -45,9 +45,9 @@ module "docdb" {
   cc_private_subnet_cidrs = local.private_subnet_cidrs
 
   docdb_az            = local.availability_zones[0]
-  docdb_name          = "doc-db-instance"
-  docdb_user_name     = "docDBUser"
-  docdb_user_password = "docDBPassword"
+  docdb_name          = "parking"
+  docdb_user_name     = "root"
+  docdb_user_password = "password"
 }
 
 module "elasticache" {
@@ -60,16 +60,43 @@ module "elasticache" {
   elasticache_name = "elasticache-instance"
 }
 
-module "webserver" {
-  source = "./modules/webserver"
+module "elb" {
+  source     = "./modules/elb"
+  cc_vpc_id  = module.ccVPC.vpc_id
+  subnet1_id = module.ccVPC.public_subnets[0].id
+  subnet2_id = module.ccVPC.public_subnets[1].id
+}
 
-  webserver_az = local.availability_zones[0]
-
-  cc_vpc_id         = module.ccVPC.vpc_id
-  cc_public_subnets = module.ccVPC.public_subnets
+module "asg" {
+  source                = "./modules/asg"
+  cc_vpc_id             = module.ccVPC.vpc_id
+  elb_security_group_id = module.elb.elb_security_group_id
+  elb_id                = module.elb.elb_id
+  subnet1_id            = module.ccVPC.public_subnets[0].id
+  subnet2_id            = module.ccVPC.public_subnets[1].id
 }
 
 resource "aws_key_pair" "ccKP" {
   key_name   = "ccKP"
   public_key = file("${path.module}/keypair/public-key.pub")
+}
+
+output "rds-endpoint" {
+  value = module.rds.rds-endpoint
+}
+
+output "rds-url" {
+  value = module.rds.rds-url
+}
+
+output "rds-replica-url" {
+  value = module.rds.replica-url
+}
+
+output "docdb-endpoint" {
+  value = module.docdb.docdb-endpoint
+}
+
+output "load_balancer_dns_name" {
+  value = module.elb.elb_endpoint
 }

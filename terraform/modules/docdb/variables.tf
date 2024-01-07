@@ -41,7 +41,7 @@ variable "docdb_user_name" {
   type        = string
   sensitive   = true
   validation {
-    condition     = length(var.docdb_user_name) > 5
+    condition     = length(var.docdb_user_name) > 2
     error_message = "DB UserName must not be empty."
   }
 }
@@ -51,7 +51,7 @@ variable "docdb_user_password" {
   type        = string
   sensitive   = true
   validation {
-    condition     = length(var.docdb_user_password) > 8
+    condition     = length(var.docdb_user_password) > 3
     error_message = "DB User Password must not be empty."
   }
 }
