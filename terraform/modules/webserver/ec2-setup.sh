@@ -3,7 +3,7 @@
 [ `whoami` = root ] || exec sudo su -c $0 root 
 
 # Disabling restarting of services after updates
-sudo apt remove needrestart -y
+sudo apt remove needrestart -y &&
 
 # Installing CodeDeploy agent
 sudo apt update && sudo apt upgrade -y &&
