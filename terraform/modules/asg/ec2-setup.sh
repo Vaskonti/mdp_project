@@ -8,7 +8,7 @@ sudo mkdir /var/www/mdp_project &&
 sudo git clone https://github.com/VasilHristovDev/mdp_project /var/www/mdp_project && 
 
 # Disabling restarting of services after updates
-sudo apt remove needrestart -y
+sudo apt remove needrestart -y &&
 
 # Installing dependencies
 sudo apt update && sudo apt upgrade -y &&
