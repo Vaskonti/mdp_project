@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('kurec');
+    return view('welcome');
 });
 
 Route::get('/home', function () {
     Log::debug('hello-message',['test-context']);
-    return view('welcome');
+    return view('kurec');
 });
