@@ -7,18 +7,6 @@ variable "cc_vpc_id" {
   }
 }
 
-# Defining Public Key
-variable "public_key" {
-  default = "tests.pub"
-} # Defining Private Key
-variable "private_key" {
-  default = "tests.pem"
-} # Definign Key Name for connection
-variable "key_name" {
-  default     = "tests"
-  description = "Name of AWS key pair"
-}
-
 variable "elb_security_group_id" {
   description = "elb security group id"
   type        = string
