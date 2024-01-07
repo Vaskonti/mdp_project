@@ -289,7 +289,30 @@ jobs:
           secret: ${{ github.TOKEN }}
           approvers: VasilHristovDev, themask025, kaisiq
           minimum-approvals: 1
-          issue-title: "Deploying v1.3.5 to prod from staging"
-          issue-body: "Please approve or deny the deployment of version v1.3.5."
+          issue-title: "Deploying to production"
+          issue-body: "Please approve or deny the deployment to production"
           exclude-workflow-initiator-as-approver: false
+
+DeployToProd:
+  needs: [ManualApproval]
+  runs-on: ubuntu-latest
+  steps:
+    - uses: aws-actions/configure-aws-credentials@v2
+      with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: us-east-1
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - id: deploy
+    - name: Deploy to Prod
+      uses: webfactory/create-aws-codedeploy-deployment@v0.2.2
+    - name: Deployment notes
+      uses: peter-evans/commit-comment@v2
+      with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            @${{ github.actor }} this was deployed as [${{ steps.deploy.outputs.deploymentId }}](https://console.aws.amazon.com/codesuite/codedeploy/deployments/${{ steps.deploy.outputs.deploymentId }}?region=eu-central-1) to group `${{ steps.deploy.outputs.deploymentGroupName }}`.
+
+
 

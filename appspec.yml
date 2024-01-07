@@ -1,0 +1,14 @@
+# .appspec.yml
+
+# ... here be your existing CodeDeploy configuration.
+
+# This section controls the action:
+branch_config:
+
+  main:
+    deploymentGroupName: laravel-app-deployment-group
+    deploymentGroupConfig:
+      serviceRoleArn: arn:aws:iam::262736261154:role/CodeDeployRole
+    deploymentConfig:
+      autoRollbackConfiguration:
+        enabled: true
