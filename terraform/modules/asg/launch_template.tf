@@ -7,7 +7,7 @@ resource "aws_launch_template" "webserverconfig" {
   user_data            = file("${path.module}/ec2-setup.sh")
 
   iam_instance_profile {
-    arn = "arn:aws:iam::262736261154:role/WebServerRole"
+    arn = "arn:aws:iam::262736261154:instance-profile/WebServerRole"
   }
 
   update_default_version = true
