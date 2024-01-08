@@ -20,8 +20,7 @@ resource "aws_autoscaling_group" "webserver" {
   ]
   metrics_granularity = "1Minute"
   vpc_zone_identifier = [
-    var.subnet1_id,
-    var.subnet2_id
+    var.subnet1_id
   ]
   lifecycle {
     create_before_destroy = true

@@ -1,8 +1,7 @@
 resource "aws_elasticache_subnet_group" "elasticache_subnet_group" {
   name = "elasticache-subnet-group"
   subnet_ids = [
-    var.cc_private_subnets[0].id,
-    var.cc_private_subnets[1].id
+    var.cc_private_subnets[0].id
   ]
 }
 
@@ -16,8 +15,7 @@ resource "aws_security_group" "elasticache_sg" {
     to_port   = 6379
     protocol  = "tcp"
     cidr_blocks = [
-      var.cc_private_subnet_cidrs[0],
-      var.cc_private_subnet_cidrs[1]
+      var.cc_private_subnet_cidrs[0]
     ]
   }
 }

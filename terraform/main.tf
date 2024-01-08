@@ -64,7 +64,6 @@ module "elb" {
   source     = "./modules/elb"
   cc_vpc_id  = module.ccVPC.vpc_id
   subnet1_id = module.ccVPC.public_subnets[0].id
-  subnet2_id = module.ccVPC.public_subnets[1].id
 }
 
 module "asg" {
