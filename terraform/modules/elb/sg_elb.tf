@@ -1,7 +1,7 @@
 # Creating Security Group for ELB
 resource "aws_security_group" "ElbSG" {
-  name        = "Demo Security Group"
-  description = "Demo Module"
+  name        = "ELB Security Group"
+  description = "Demo SG for ELB"
   vpc_id      = var.cc_vpc_id # Inbound Rules
   # HTTP access from anywhere
   ingress {

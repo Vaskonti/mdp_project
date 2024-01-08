@@ -12,6 +12,11 @@ variable "elb_security_group_id" {
   type        = string
 }
 
+variable "elb_security_group_name" {
+  description = "elb security group id"
+  type        = string
+}
+
 variable "elb_id" {
   description = "ELB id"
 }

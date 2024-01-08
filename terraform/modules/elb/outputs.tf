@@ -13,3 +13,7 @@ output "elb_name" {
 output "elb_endpoint" {
   value = aws_elb.web_elb.dns_name
 }
+
+output "elb_sg_name" {
+  value = aws_security_group.ElbSG.name
+}
