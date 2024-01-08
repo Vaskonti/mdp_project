@@ -6,6 +6,10 @@ output "elb_id" {
   value = aws_elb.web_elb.id
 }
 
+output "elb_name" {
+  value = aws_elb.web_elb.name
+}
+
 output "elb_endpoint" {
   value = aws_elb.web_elb.dns_name
 }

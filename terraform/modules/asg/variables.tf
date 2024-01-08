@@ -15,6 +15,11 @@ variable "elb_security_group_id" {
 variable "elb_id" {
   description = "ELB id"
 }
+
+variable "elb_name" {
+  description = "ELB id"
+}
+
 variable "subnet1_id" {
   description = "public subnet 1 id"
   type        = string
