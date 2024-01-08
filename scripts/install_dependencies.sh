@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install dependencies
-sudo rm -f /var/www/html
+sudo rm -rf /var/www/html
 # Installing dependencies
 sudo apt update && sudo apt upgrade -y &&
 sudo apt install software-properties-common -y &&
