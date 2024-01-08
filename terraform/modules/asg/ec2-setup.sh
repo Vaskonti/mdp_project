@@ -35,7 +35,7 @@ sudo php artisan migrate ||
 sudo chmod 777 -R /var/www/mdp_project/storage &&
 
 # Nginx setup
-sudo cp /var/www/mdp_project/terraform/modules/webserver/nginx.conf /etc/nginx/sites-available/mdp_project &&
+sudo cp /var/www/mdp_project/terraform/modules/asg/nginx.conf /etc/nginx/sites-available/mdp_project &&
 cd /etc/nginx/sites-enabled &&
 sudo ln -s /etc/nginx/sites-available/mdp_project &&
 sudo rm /etc/nginx/sites-available/default &&
