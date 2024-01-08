@@ -1,8 +1,5 @@
-# .appspec.yml
-
-# ... here be your existing CodeDeploy configuration.
-
-# This section controls the action:
+version: 0.0
+os: linux
 branch_config:
 
   main:
