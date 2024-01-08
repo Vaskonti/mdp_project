@@ -2,7 +2,7 @@
 
 # Project setup
 cd /var/www/mdp_project &&
-sudo cp .env.ci .env &&
+sudo aws s3 cp s3://environment-laravel/env/.env . &&
 printf "\n" | sudo composer install &&
 sudo php artisan key:generate &&
 sudo php artisan migrate ||
