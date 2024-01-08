@@ -1,7 +1,8 @@
 resource "aws_db_subnet_group" "ccDBSubnetGroup" {
   name = "cc-db-subnet-group"
   subnet_ids = [
-    var.cc_private_subnets[0].id
+    var.cc_private_subnets[0].id,
+    var.cc_private_subnets[1].id
   ]
   tags = {
     Name    = "ccDBSubnetGroup"
@@ -18,7 +19,8 @@ resource "aws_security_group" "ccDBSecurityGroup" {
     to_port   = 3306
     protocol  = "tcp"
     cidr_blocks = [
-      var.cc_private_subnet_cidrs[0]
+      var.cc_private_subnet_cidrs[0],
+      var.cc_private_subnet_cidrs[1]
     ]
   }
   tags = {
