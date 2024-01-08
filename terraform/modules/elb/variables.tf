@@ -11,8 +11,3 @@ variable "subnet1_id" {
   description = "public subnet 1 id"
   type        = string
 }
-
-variable "subnet2_id" {
-  description = "public subnet 2 id"
-  type        = string
-}

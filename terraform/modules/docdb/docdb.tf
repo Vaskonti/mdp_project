@@ -1,7 +1,6 @@
 resource "aws_docdb_subnet_group" "docDB_subnet_group" {
-  name = "docdb-subnet-group"
-  subnet_ids = [var.cc_private_subnets[0].id,
-  var.cc_private_subnets[1].id]
+  name       = "docdb-subnet-group"
+  subnet_ids = [var.cc_private_subnets[0].id]
 }
 
 resource "aws_security_group" "docdb_sg" {
@@ -14,8 +13,7 @@ resource "aws_security_group" "docdb_sg" {
     to_port   = 27017
     protocol  = "tcp"
     cidr_blocks = [
-      var.cc_private_subnet_cidrs[0],
-      var.cc_private_subnet_cidrs[1]
+      var.cc_private_subnet_cidrs[0]
     ]
   }
 }

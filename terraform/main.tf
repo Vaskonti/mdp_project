@@ -75,7 +75,6 @@ module "asg" {
   elb_id                  = module.elb.elb_id
   elb_name                = module.elb.elb_name
   subnet1_id              = module.ccVPC.public_subnets[0].id
-  subnet2_id              = module.ccVPC.public_subnets[1].id
 }
 
 resource "aws_key_pair" "ccKP" {
