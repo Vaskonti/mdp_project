@@ -1,5 +1,5 @@
 resource "aws_autoscaling_group" "webserver" {
-  name             = "${aws_launch_configuration.webserverconfig.name}-asg"
+  name             = "${aws_launch_template.webserverconfig.name}-asg"
   min_size         = 2
   desired_capacity = 2
   max_size         = 3
@@ -8,7 +8,9 @@ resource "aws_autoscaling_group" "webserver" {
   load_balancers = [
     var.elb_id
   ]
-  launch_configuration = aws_launch_configuration.webserverconfig.name
+  launch_template {
+    name = aws_launch_template.webserverconfig.name
+  }
   enabled_metrics = [
     "GroupMinSize",
     "GroupMaxSize",
@@ -34,12 +36,12 @@ resource "aws_autoscaling_group" "webserver" {
 
 # <-------- CodeDeploy ----------->
 
-resource "aws_codedeploy_application" "mdp_project" {
+resource "aws_codedeploy_app" "mdp_project" {
   name = "mdp_project"
 }
 
 resource "aws_codedeploy_deployment_group" "laravel_app_deployment_group" {
-  app_name              = aws_codedeploy_application.mdp_project.name
+  app_name              = aws_codedeploy_app.mdp_project.name
   deployment_group_name = "laravel-app-deployment-group"
   service_role_arn      = "arn:aws:iam::262736261154:role/CodeDeployRole"
 
@@ -75,10 +77,4 @@ resource "aws_codedeploy_deployment_group" "laravel_app_deployment_group" {
   }
 
   deployment_config_name = "CodeDeployDefault.OneAtATime"
-}
-
-resource "aws_codedeploy_appspec" "laravel_app_appspec" {
-  application_name = aws_codedeploy_application.mdp_project.name
-
-  content = file("${path.module}/../../appspec.yaml") # moje da trqbva da se opravi
 }
