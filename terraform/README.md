@@ -27,7 +27,8 @@ This terraform code will create:
 -   RDS instance
     -   Has port 3306 open from SG
     -   Read replica for the RDS instance
--   ElasticSearch domain
+-   CodeDeploy
+-   OpenSearch domain
     -   connected to the vpc
 
 ## Requirements

@@ -39,6 +39,7 @@ A **Parking** app for demonstration purposes.
     -   DocumentDB
     -   RDS
     -   ElastiCache
+    -   CodeDeploy
     -   OpenSearch
 -   [**Terraform**](https://github.com/VasilHristovDev/mdp_project/tree/main/terraform) for automation of deployment
 
