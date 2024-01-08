@@ -76,3 +76,9 @@ resource "aws_codedeploy_deployment_group" "laravel_app_deployment_group" {
 
   deployment_config_name = "CodeDeployDefault.OneAtATime"
 }
+
+resource "aws_codedeploy_appspec" "laravel_app_appspec" {
+  application_name = aws_codedeploy_application.mdp_project.name
+
+  content = file("${path.module}/../../appspec.yaml") # moje da trqbva da se opravi
+}
