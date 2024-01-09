@@ -1,6 +1,6 @@
 #!/bin/bash
 # Ensuring permissions
-[ `whoami` = root ] || exec sudo su -c $0 root 
+[ `whoami` = root ] || exec sudo su -c $0 root
 
 # Disabling restarting of services after updates
 sudo apt remove needrestart -y &&
@@ -16,8 +16,8 @@ sudo service codedeploy-agent start &&
 
 # Cloning project
 sudo mkdir /var/www ||
-sudo mkdir /var/www/mdp_project && 
-sudo git clone https://github.com/VasilHristovDev/mdp_project /var/www/mdp_project && 
+sudo mkdir /var/www/mdp_project &&
+sudo git clone https://github.com/VasilHristovDev/mdp_project /var/www/mdp_project &&
 
 # Installing dependencies
 sudo apt update && sudo apt upgrade -y &&
@@ -46,5 +46,5 @@ cd /etc/nginx/sites-enabled &&
 sudo ln -s /etc/nginx/sites-available/mdp_project &&
 sudo rm /etc/nginx/sites-available/default &&
 sudo rm /etc/nginx/sites-enabled/default &&
-sudo systemctl start nginx && 
+sudo systemctl start nginx &&
 sudo systemctl restart nginx
