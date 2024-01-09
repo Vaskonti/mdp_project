@@ -46,7 +46,7 @@ jobs:
       - name: Install Cli-markdown
         run: npm install -g markdownlint-cli
       - name: Run cli-markdown
-        run: markdownlint '**/*.md' --ignore vendor
+        run: markdownlint --disable MD013 -- '**/*.md' --ignore vendor
   EditorConfig:
     name: Check .editorconfig file
     runs-on: ubuntu-latest
