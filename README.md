@@ -107,4 +107,3 @@ A **Parking** app for demonstration purposes.
 - [x] AWS Appconfig
 - [x] AWS CodeDeploy
 - [x] AWS S3
-
