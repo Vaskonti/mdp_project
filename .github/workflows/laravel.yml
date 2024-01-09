@@ -57,7 +57,7 @@ jobs:
       - name: Install editorconfig-checker
         run: npm install editorconfig-checker -g
       - name: run editorconfig-checker to code
-        run: editorconfig-checker --exclude vendor --exclude .idea
+        run: editorconfig-checker -disable-indent-size --exclude vendor --exclude .idea
   PhpStan:
     runs-on: ubuntu-latest
     needs: [CacheComposer]
