@@ -39,7 +39,7 @@
     35 => 'App\\Providers\\RouteServiceProvider',
     36 => 'App\\Providers\\TelescopeServiceProvider',
   ),
-  'eager' => 
+  'eager' =>
   array (
     0 => 'Illuminate\\Auth\\AuthServiceProvider',
     1 => 'Illuminate\\Cookie\\CookieServiceProvider',
@@ -64,7 +64,7 @@
     20 => 'App\\Providers\\RouteServiceProvider',
     21 => 'App\\Providers\\TelescopeServiceProvider',
   ),
-  'deferred' => 
+  'deferred' =>
   array (
     'Illuminate\\Broadcasting\\BroadcastManager' => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
     'Illuminate\\Contracts\\Broadcasting\\Factory' => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
@@ -210,7 +210,7 @@
   ),
   'when' =>
   array (
-    'Illuminate\\Broadcasting\\BroadcastServiceProvider' => 
+    'Illuminate\\Broadcasting\\BroadcastServiceProvider' =>
     array (
     ),
     'Illuminate\\Bus\\BusServiceProvider' =>
