@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install dependencies
-sudo rm -rf /var/www/html ||
+sudo rm -rf /var/www/mdp_project ||
 
 # Installing dependencies
 sudo apt update && sudo apt upgrade -y &&
