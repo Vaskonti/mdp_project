@@ -1,70 +1,71 @@
 <?php return array (
-  'laravel/sail' => 
+  'laravel/sail' =>
   array (
-    'providers' => 
+    'providers' =>
     array (
       0 => 'Laravel\\Sail\\SailServiceProvider',
     ),
   ),
-  'laravel/sanctum' => 
+  'laravel/sanctum' =>
   array (
-    'providers' => 
+    'providers' =>
     array (
       0 => 'Laravel\\Sanctum\\SanctumServiceProvider',
     ),
   ),
-  'laravel/telescope' => 
+  'laravel/telescope' =>
   array (
-    'providers' => 
+    'providers' =>
     array (
       0 => 'Laravel\\Telescope\\TelescopeServiceProvider',
     ),
   ),
-  'laravel/tinker' => 
+  'laravel/tinker' =>
   array (
-    'providers' => 
+    'providers' =>
     array (
       0 => 'Laravel\\Tinker\\TinkerServiceProvider',
     ),
   ),
-  'mongodb/laravel-mongodb' => 
+  'mongodb/laravel-mongodb' =>
   array (
-    'providers' => 
+    'providers' =>
     array (
       0 => 'MongoDB\\Laravel\\MongoDBServiceProvider',
       1 => 'MongoDB\\Laravel\\MongoDBQueueServiceProvider',
     ),
   ),
-  'nesbot/carbon' => 
+  'nesbot/carbon' =>
   array (
-    'providers' => 
+    'providers' =>
     array (
       0 => 'Carbon\\Laravel\\ServiceProvider',
     ),
   ),
-  'nunomaduro/collision' => 
+  'nunomaduro/collision' =>
   array (
-    'providers' => 
+    'providers' =>
     array (
       0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     ),
   ),
-  'nunomaduro/termwind' => 
+  'nunomaduro/termwind' =>
   array (
-    'providers' => 
+    'providers' =>
     array (
       0 => 'Termwind\\Laravel\\TermwindServiceProvider',
     ),
   ),
-  'spatie/laravel-ignition' => 
+  'spatie/laravel-ignition' =>
   array (
-    'providers' => 
+    'providers' =>
     array (
       0 => 'Spatie\\LaravelIgnition\\IgnitionServiceProvider',
     ),
-    'aliases' => 
+    'aliases' =>
     array (
       'Flare' => 'Spatie\\LaravelIgnition\\Facades\\Flare',
     ),
   ),
 );
+
