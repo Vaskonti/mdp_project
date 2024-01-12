@@ -6,7 +6,7 @@ resource "aws_autoscaling_group" "webserver" {
 
   health_check_type = "ELB"
   load_balancers = [
-    var.elb_id
+    var.elb_security_group_id
   ]
   launch_template {
     name = aws_launch_template.webserverconfig.name
@@ -20,7 +20,8 @@ resource "aws_autoscaling_group" "webserver" {
   ]
   metrics_granularity = "1Minute"
   vpc_zone_identifier = [
-    var.subnet1_id
+    var.subnet1_id,
+    var.subnet2_id
   ]
   lifecycle {
     create_before_destroy = true
@@ -71,7 +72,7 @@ resource "aws_codedeploy_deployment_group" "laravel_app_deployment_group" {
 
   load_balancer_info {
     elb_info {
-      name = var.elb_name
+      name = var.elb_id
     }
   }
 

@@ -64,16 +64,18 @@ module "elb" {
   source     = "./modules/elb"
   cc_vpc_id  = module.ccVPC.vpc_id
   subnet1_id = module.ccVPC.public_subnets[0].id
+  subnet2_id = module.ccVPC.public_subnets[1].id
 }
 
 module "asg" {
   source                  = "./modules/asg"
   cc_vpc_id               = module.ccVPC.vpc_id
   elb_security_group_id   = module.elb.elb_security_group_id
-  elb_security_group_name = module.elb.elb_sg_name
+  elb_security_group_name = module.elb.elb_name
   elb_id                  = module.elb.elb_id
   elb_name                = module.elb.elb_name
   subnet1_id              = module.ccVPC.public_subnets[0].id
+  subnet2_id              = module.ccVPC.public_subnets[1].id
 }
 
 resource "aws_key_pair" "ccKP" {

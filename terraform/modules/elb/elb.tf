@@ -1,7 +1,7 @@
 resource "aws_elb" "web_elb" {
   name                      = "web-elb"
   security_groups           = ["${aws_security_group.ElbSG.id}"]
-  subnets                   = ["${var.subnet1_id}"]
+  subnets                   = ["${var.subnet1_id}", "${var.subnet2_id}"]
   cross_zone_load_balancing = true
   health_check {
     healthy_threshold   = 2
