@@ -91,10 +91,6 @@ output "rds-url" {
   value = module.rds.rds-url
 }
 
-output "rds-replica-url" {
-  value = module.rds.replica-url
-}
-
 output "docdb-endpoint" {
   value = module.docdb.docdb-endpoint
 }
