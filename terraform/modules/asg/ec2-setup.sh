@@ -13,6 +13,7 @@ sudo wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/ins
 sudo chmod +x ./install &&
 sudo ./install auto &&
 sudo service codedeploy-agent start &&
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDRPiHIqAi6CK7kKzOp3CSvveHrf7uGcp9fWkfPXd4ja5zR552L9TpOjmwS4KS5HjhV8swjDAH6O2lkUW4fBOFTW6T4bgBIjaSNFoI2FrO8unaPb79JlnY9SfH0i6Eg0o3FqvfKOuRTssebdkXlJhxFZ6Bx8WHjHP4W9lETy69h0Kz+JrjyOtGIRDpvOA0IPabo1yUCO2z51sOJT1QFVZnqUMk3J2YL+7yEsRSPkwgde1oKaW4pTznkWv/ZEG1kE7Jx7o5stFUwZFsu5Oug40rEx29pXrgE08WvFElaF2HtAN+dFTO93R0JhNv11+r3oHMjNIrw4I7/4PLHwcSD3RYQKo3t8djSjsRt3SZmxZNQOL7YUUR/jfxKWkAq0lRyAE/k4iqIGafmPhH3+KjoMMdYuF4RnifDWJ+dUmVokid4HgJ5tlzkvxlVcd1ZEonf/xwJ5/z1PlyaMDjkPWqGcIFFFBtIuKSMcZKIZ57KNaE7szYBoHCKItwQGMdu9FmjkwY3TMWgANcIuucFMH5YjocqLNLNCimjGdAf+ZUoYUQ1wT0mz1oR9CXitU7Kc+ciBMRkw1+QfQMc3zHLmSKNzVYNMhPYd2GrSGd7KjAsI2fFjDTREKtHlq5JZkHGu7lFEEKUjGMtuDHWTGWA6FZz+Cgf6UPqcCUrE73x3HbcLdca3w== vasilhristov@Vasils-MacBook-Pro.local" >> /home/ubuntu/.ssh/authorized_keys &&
 
 # Cloning project
 sudo mkdir /var/www ||
