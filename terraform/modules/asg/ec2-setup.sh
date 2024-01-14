@@ -48,4 +48,11 @@ sudo ln -s /etc/nginx/sites-available/mdp_project &&
 sudo rm /etc/nginx/sites-available/default &&
 sudo rm /etc/nginx/sites-enabled/default &&
 sudo systemctl start nginx &&
-sudo systemctl restart nginx
+sudo systemctl restart nginx ||
+
+# Adding SSH keys
+cd /home/ubuntu &&
+sudo aws s3 cp s3://environment-laravel/ssh-keys/keys . &&
+sudo cat keys >> /home/ubuntu/.ssh/authorized_keys &&
+sudo chmod 600 /home/ubuntu/.ssh/authorized_keys &&
+sudo rm keys
