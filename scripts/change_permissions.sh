@@ -4,6 +4,7 @@
 cd /var/www/mdp_project &&
 sudo aws s3 cp s3://environment-laravel/env/.env . &&
 sudo composer clear-cache ||
+printf "\n" | sudo composer update &&
 sudo rm -rf /var/www/mdp_project/vendor ||
 printf "\n" | sudo composer install &&
 sudo php artisan key:generate &&
