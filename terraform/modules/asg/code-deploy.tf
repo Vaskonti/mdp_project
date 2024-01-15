@@ -31,7 +31,7 @@ resource "aws_codedeploy_deployment_group" "mdp_project" {
     }
 
     green_fleet_provisioning_option {
-      action = "DISCOVER_EXISTING"
+      action = "COPY_AUTO_SCALING_GROUP"
     }
   }
 

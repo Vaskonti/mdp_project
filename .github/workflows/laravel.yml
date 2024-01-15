@@ -2,8 +2,7 @@ name: Laravel
 
 on:
   push:
-    branches: ['main']
-
+    branches: ["main"]
 
 jobs:
   CacheComposer:
@@ -14,7 +13,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: "8.2"
           extensions: mysql, mongodb
       - name: Get Composer Cache Directory
         id: composer-cache
@@ -67,7 +66,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: "8.2"
           extensions: mysql, mongodb
       - name: Restore Composer dependencies from cache
         uses: actions/cache@v3
@@ -92,7 +91,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: "8.2"
           extensions: mysql, mongodb
       - name: Restore Composer dependencies from cache
         uses: actions/cache@v3
@@ -142,7 +141,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: "8.2"
           extensions: mysql, mongodb
       - name: Restore Composer dependencies from cache
         uses: actions/cache@v3
@@ -173,7 +172,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: "8.2"
           extensions: mysql, mongodb
       - name: Restore Composer dependencies from cache
         uses: actions/cache@v3
@@ -259,9 +258,9 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: '${{ steps.login-ecr.outputs.registry }}/mdp-laravel-images:${{ github.sha }}'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          image-ref: "${{ steps.login-ecr.outputs.registry }}/mdp-laravel-images:${{ github.sha }}"
+          format: "sarif"
+          output: "trivy-results.sarif"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -278,7 +277,7 @@ jobs:
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: "trivy-results.sarif"
 
   ManualApproval:
     needs: [SonarCloud, SnykTests]
@@ -287,7 +286,7 @@ jobs:
       - uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
-          approvers: VasilHristovDev, themask025, kaisiq
+          approvers: VasilHristovDev, themask025, Kaisiq
           minimum-approvals: 1
           issue-title: "Deploying to production"
           issue-body: "Please approve or deny the deployment to production"
