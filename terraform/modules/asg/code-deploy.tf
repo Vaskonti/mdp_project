@@ -34,7 +34,7 @@ resource "aws_codedeploy_deployment_group" "mdp_project" {
   app_name   = aws_codedeploy_app.mdp_project.name
   # deployment_group_name = "laravel-app-deployment-group"
   deployment_group_name  = "mdp_project-deployment-group"
-  deployment_config_name = "CodeDeployDefault.AllAtOnce"
+  deployment_config_name = "CodeDeployDefault.OneAtATime"
   # service_role_arn      = "arn:aws:iam::262736261154:role/CodeDeployRole"
   service_role_arn = aws_iam_role.mdp_project.arn
 
