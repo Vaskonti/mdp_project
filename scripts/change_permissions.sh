@@ -12,7 +12,7 @@ sudo chmod 777 -R /var/www/mdp_project/storage &&
 sudo cp /var/www/mdp_project/terraform/modules/asg/nginx.conf /etc/nginx/sites-available/mdp_project &&
 cd /etc/nginx/sites-enabled &&
 sudo ln -s /etc/nginx/sites-available/mdp_project ;
-sudo rm /etc/nginx/sites-available/default &&
-sudo rm /etc/nginx/sites-enabled/default &&
+sudo rm /etc/nginx/sites-available/default ;
+sudo rm /etc/nginx/sites-enabled/default ;
 sudo systemctl start nginx &&
 sudo systemctl restart nginx
