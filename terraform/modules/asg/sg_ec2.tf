@@ -22,6 +22,12 @@ resource "aws_security_group" "ec2_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   } # Outbound Rules
+   ingress {
+      from_port   = 3306
+      to_port     = 3306
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    } # Outbound Rules
   # Internet access to anywhere
   egress {
     from_port   = 0

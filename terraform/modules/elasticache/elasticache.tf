@@ -15,10 +15,7 @@ resource "aws_security_group" "elasticache_sg" {
     from_port = 6379
     to_port   = 6379
     protocol  = "tcp"
-    cidr_blocks = [
-      var.cc_private_subnet_cidrs[0],
-      var.cc_private_subnet_cidrs[1]
-    ]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 

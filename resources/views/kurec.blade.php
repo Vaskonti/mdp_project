@@ -72,17 +72,17 @@
                 </span>
         </li>
 
-        <li>
-            <span class="status-label">Elasticsearch:</span> <span class="@if(checkElasticsearchConnection()) connected @else not-connected @endif">
-                    @if(checkElasticsearchConnection()) Connected @else Not Connected @endif
-                </span>
-        </li>
+{{--        <li>--}}
+{{--            <span class="status-label">Elasticsearch:</span> <span class="@if(checkElasticsearchConnection()) connected @else not-connected @endif">--}}
+{{--                    @if(checkElasticsearchConnection()) Connected @else Not Connected @endif--}}
+{{--                </span>--}}
+{{--        </li>--}}
 
-        <li>
-            <span class="status-label">Kibana:</span> <span class="@if(checkKibanaConnection()) connected @else not-connected @endif">
-                    @if(checkKibanaConnection()) Connected @else Not Connected @endif
-                </span>
-        </li>
+{{--        <li>--}}
+{{--            <span class="status-label">Kibana:</span> <span class="@if(checkKibanaConnection()) connected @else not-connected @endif">--}}
+{{--                    @if(checkKibanaConnection()) Connected @else Not Connected @endif--}}
+{{--                </span>--}}
+{{--        </li>--}}
 
         <li>
             <span class="status-label">Redis:</span> <span class="@php $redis = app('redis.connection'); try { $redis->ping(); echo 'connected'; } catch (\Exception $e) { echo 'not-connected'; } @endphp">

@@ -13,10 +13,7 @@ resource "aws_security_group" "docdb_sg" {
     from_port = 27017
     to_port   = 27017
     protocol  = "tcp"
-    cidr_blocks = [
-      var.cc_private_subnet_cidrs[0],
-      var.cc_private_subnet_cidrs[1]
-    ]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
