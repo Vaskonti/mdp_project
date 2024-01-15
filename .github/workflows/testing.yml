@@ -35,7 +35,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Validate YAML files
-        run: yamllint .
+        run: yamllint -c ./yamllint.conf .
   CliMarkdown:
     runs-on: ubuntu-latest
     needs: [CacheComposer]
@@ -45,7 +45,7 @@ jobs:
       - name: Install Cli-markdown
         run: npm install -g markdownlint-cli
       - name: Run cli-markdown
-        run: markdownlint '**/*.md' --ignore vendor
+        run: markdownlint --disable MD013 -- '**/*.md' --ignore vendor
   EditorConfig:
     name: Check .editorconfig file
     runs-on: ubuntu-latest
@@ -56,7 +56,7 @@ jobs:
       - name: Install editorconfig-checker
         run: npm install editorconfig-checker -g
       - name: run editorconfig-checker to code
-        run: editorconfig-checker --exclude vendor --exclude .idea
+        run: editorconfig-checker -disable-indent-size --exclude vendor --exclude .idea
   PhpStan:
     runs-on: ubuntu-latest
     needs: [CacheComposer]

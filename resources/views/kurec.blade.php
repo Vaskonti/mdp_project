@@ -106,7 +106,7 @@
     }
     function checkKibanaConnection():bool {
         try {
-            $request = \Illuminate\Support\Facades\Http::get('http://kibana:5601/');
+            $request = \Illuminate\Support\Facades\Http::get(env('KIBANA_URL'));
             return $request->successful();
         } catch (\Exception $e) {
             return false;

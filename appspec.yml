@@ -25,6 +25,6 @@ hooks:
 branch_config:
 
   main:
-    deploymentGroupName: laravel-app-deployment-group
+    deploymentGroupName: mdp_project-deployment-group
     deploymentGroupConfig:
       serviceRoleArn: arn:aws:iam::262736261154:role/CodeDeployRole
