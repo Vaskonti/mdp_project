@@ -36,6 +36,7 @@ sudo ./aws/install &&
 # Project setup
 cd /var/www/mdp_project &&
 sudo aws s3 cp s3://environment-laravel/env/.env . &&
+sudo wget https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem &&
 printf "\n" | sudo composer install &&
 sudo php artisan key:generate &&
 sudo php artisan migrate ||
