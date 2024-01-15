@@ -2,7 +2,7 @@ resource "aws_autoscaling_policy" "web_policy_up" {
   name                   = "web_policy_up"
   scaling_adjustment     = 1
   adjustment_type        = "ChangeInCapacity"
-  cooldown               = 300
+  cooldown               = 600
   autoscaling_group_name = aws_autoscaling_group.webserver.name
 }
 resource "aws_cloudwatch_metric_alarm" "web_cpu_alarm_up" {
