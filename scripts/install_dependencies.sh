@@ -14,4 +14,4 @@ sudo apt install php8.2-fpm php8.2-common php8.2-mysql php8.2-xml php8.2-xmlrpc 
 sudo apt install unzip &&
 sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &&
 sudo unzip -u awscliv2.zip &&
-sudo ./aws/install
+sudo ./aws/install --update
